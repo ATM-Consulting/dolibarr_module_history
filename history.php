@@ -27,6 +27,7 @@
         <tr class="liste_titre">
             <th><?php echo $langs->trans('Date') ?></th>
             <th><?php echo $langs->trans('Action') ?></th>
+            <th><?php echo $langs->trans('WhatChanged') ?></th>
             <th><?php echo $langs->trans('user') ?></th>
         </tr>
         
@@ -36,8 +37,9 @@
         
         ?>
         <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
-            <td><?php echo $h->get_date('date_entry'); ?></td>
+            <td><?php echo $h->get_date('date_entry','d/m/Y H:i:s'); ?></td>
             <td><?php echo $h->show_action() ?></td>
+            <td><?php echo $h->show_whatChanged() ?></td>
             <td><?php echo $h->show_user() ?></td>
         </tr>
         <?

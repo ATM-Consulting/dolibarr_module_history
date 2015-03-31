@@ -16,13 +16,35 @@ class THistory extends TObjetStd {
         
         $this->start();
     }
+
+    function compare(&$newO, &$oldO) {
+	$this->what_changed = '';
+
+	foreach($newO as $k=>$v) {
+
+		if(!is_array($v) && !is_object($v)) {
+			if(isset($oldO->{$k}) && !empty($v) && $oldO->{$k} != $v) {
+				$this->what_changed.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+			}
+
+		}
+
+	}
+//exit($this->what_changed.'!');
+    }
+
+    function show_whatChanged() {
+	
+	return nl2br(htmlentities($this->what_changed));
+	
+    }
     
     function show_action() {
-        
+        global $langs;
         $action='';
         
-        $action = $this->type_action;
-        
+        $action = $langs->trans($this->type_action);
+//var_dump($this);        
         return $action;
     }
     
@@ -38,7 +60,7 @@ class THistory extends TObjetStd {
     
     function save(&$PDOdb) {
         
-        if(empty($this->fk_user) || empty($this->fk_object) || empty($this->type_action)) return false;
+        if(empty($this->fk_user) || empty($this->fk_object) || empty($this->type_action) || empty($this->what_changed)) return false;
         
         return parent::save($PDOdb);
     }
@@ -55,7 +77,7 @@ class THistory extends TObjetStd {
         foreach($Tab as $row){
             
             $h=new THistory;
-            $h->load($PDOdb, $h->rowid);
+            $h->load($PDOdb, $row->rowid);
             
             $TRes[] = $h;
             
