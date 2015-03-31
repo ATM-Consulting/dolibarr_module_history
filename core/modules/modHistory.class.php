@@ -46,7 +46,7 @@ class modHistory extends DolibarrModules
 
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
-		$this->numero = ; // 104000 to 104999 for ATM CONSULTING
+		$this->numero = 104400; // 104000 to 104999 for ATM CONSULTING
 		// Key text used to identify module (for permissions, menus, etc...)
 		$this->rights_class = 'history';
 
@@ -87,7 +87,9 @@ class modHistory extends DolibarrModules
 		//							'dir' => array('output' => 'othermodulename'),      // To force the default directories names
 		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'! empty($conf->module1->enabled) && ! empty($conf->module2->enabled)', 'picto'=>'yourpicto@history')) // Set here all workflow context managed by module
 		//                        );
-		$this->module_parts = array();
+		$this->module_parts = array(
+		  'triggers' => 1
+        );
 
 		// Data directories to create when module is enabled.
 		// Example: this->dirs = array("/history/temp");
@@ -136,7 +138,10 @@ class modHistory extends DolibarrModules
 		// 'stock'            to add a tab in stock view
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
-        $this->tabs = array();
+        $this->tabs = array(
+            'propal:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=propal&id=__ID__'
+            ,'propal:-info:NU:true'
+        );
 
         // Dictionaries
 	    if (! isset($conf->history->enabled))
@@ -173,12 +178,11 @@ class modHistory extends DolibarrModules
 
 		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
 		// Example:
-		// $this->rights[$r][0] = $this->numero + $r;	// Permission id (must not be already used)
-		// $this->rights[$r][1] = 'Permision label';	// Permission label
-		// $this->rights[$r][3] = 1; 					// Permission by default for new user (0/1)
-		// $this->rights[$r][4] = 'level1';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		// $r++;
+		$this->rights[$r][0] = $this->numero + $r;	// Permission id (must not be already used)
+		$this->rights[$r][1] = 'Lire';	// Permission label
+		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
+		$this->rights[$r][4] = 'read';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$r++;
 
 
 		// Main menu entries
@@ -247,6 +251,14 @@ class modHistory extends DolibarrModules
 	function init($options='')
 	{
 		$sql = array();
+
+        define('INC_FROM_DOLIBARR',true);
+        dol_include_once('/history/config.php');
+        
+        $PDOdb=new TPDOdb;
+        
+        $o=new THistory($db);
+        $o->init_db_by_vars($PDOdb);
 
 		$result=$this->_load_tables('/history/sql/');
 

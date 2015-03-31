@@ -27,5 +27,5 @@
 		exit;
 	}
 
-	
+	dol_include_once('/history/class/history.class.php');
 
