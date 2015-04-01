@@ -133,6 +133,7 @@ class InterfaceHistorytrigger
             else $h->fk_object = $object->id;
 		
 	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
+	    else $h->what_changed = 'cf. action';
 
             $h->type_action = $action;
             $h->fk_user = $user->id;
