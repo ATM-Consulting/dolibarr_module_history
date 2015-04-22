@@ -141,6 +141,10 @@ class modHistory extends DolibarrModules
         $this->tabs = array(
             'propal:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=propal&id=__ID__'
             ,'propal:-info:NU:true'
+            ,'thirdparty:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=societe&id=__ID__'
+            ,'thirdparty:-info:NU:true'
+            ,'contact:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=contact&id=__ID__'
+            ,'contact:-info:NU:true'
         );
 
         // Dictionaries

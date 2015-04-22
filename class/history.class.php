@@ -18,18 +18,18 @@ class THistory extends TObjetStd {
     }
 
     function compare(&$newO, &$oldO) {
-	$this->what_changed = '';
-
-	foreach($newO as $k=>$v) {
-
-		if(!is_array($v) && !is_object($v)) {
-			if(isset($oldO->{$k}) && !empty($v) && $oldO->{$k} != $v) {
-				$this->what_changed.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
-			}
-
-		}
-
-	}
+    	$this->what_changed = '';
+    
+    	foreach($newO as $k=>$v) {
+    
+    		if(!is_array($v) && !is_object($v)) {
+    			if(isset($oldO->{$k}) && !empty($v) && $oldO->{$k} != $v) {
+    				$this->what_changed.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+    			}
+    
+    		}
+    
+    	}
 //exit($this->what_changed.'!');
     }
 

@@ -132,8 +132,9 @@ class InterfaceHistorytrigger
             if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
             else $h->fk_object = $object->id;
 		
-	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
-	    else $h->what_changed = 'cf. action';
+    	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
+            if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
+            else $h->what_changed = 'cf. action';
 
             $h->type_action = $action;
             $h->fk_user = $user->id;

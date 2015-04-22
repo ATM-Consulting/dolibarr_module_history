@@ -5,6 +5,7 @@
     dol_include_once('/core/lib/functions2.lib.php');
     dol_include_once('/comm/propal/class/propal.class.php');
     dol_include_once('/core/lib/propal.lib.php');
+    dol_include_once('/core/lib/contact.lib.php');
     
     llxHeader('',$langs->trans('History'));
     
@@ -16,7 +17,32 @@
         $object->fetch($fk_object);
         $head = propal_prepare_head($object);
         dol_fiche_head($head, 'history', $langs->trans('Proposal'), 0, 'propal');
-     }
+    }
+    else if($type_object=='societe') {
+        $object = new Societe($db);
+        $object->fetch($fk_object);
+        $head = societe_prepare_head($object);
+        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
+        
+    }
+    else if( class_exists(ucfirst($type_object)) ) {
+        $class = ucfirst($type_object);
+        
+        $object=new $class($db);
+        $object->fetch($fk_object);
+        
+        if(function_exists($type_object.'_prepare_head')) {
+            $head = call_user_func($type_object.'_prepare_head', $object);
+            dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);    
+        }
+        
+        
+    }
+    else{
+        exit('Erreur, ce type dobjet nest pas traité par le module');    
+        
+    }
+    
     
     $PDOdb=new TPDOdb;
     
