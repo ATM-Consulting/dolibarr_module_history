@@ -64,7 +64,7 @@
             <th><?php echo $langs->trans('Date') ?></th>
             <th><?php echo $langs->trans('Action') ?></th>
             <th><?php echo $langs->trans('WhatChanged') ?></th>
-            <th><?php echo $langs->trans('user') ?></th>
+            <th><?php echo $langs->trans('User') ?></th>
         </tr>
         
     <?
