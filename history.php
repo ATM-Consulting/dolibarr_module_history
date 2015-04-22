@@ -6,6 +6,8 @@
     dol_include_once('/comm/propal/class/propal.class.php');
     dol_include_once('/core/lib/propal.lib.php');
     dol_include_once('/core/lib/contact.lib.php');
+    dol_include_once('/core/lib/agenda.lib.php');
+    dol_include_once('/comm/action/class/actioncomm.class.php');
     
     llxHeader('',$langs->trans('History'));
     
@@ -25,6 +27,15 @@
         dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
         
     }
+    
+    else if($type_object=='action') {
+        $object = new ActionComm($db);
+        $object->fetch($fk_object);
+        $head = actions_prepare_head($object);
+        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
+        
+    }
+    
     else if( class_exists(ucfirst($type_object)) ) {
         $class = ucfirst($type_object);
         
@@ -35,7 +46,6 @@
             $head = call_user_func($type_object.'_prepare_head', $object);
             dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);    
         }
-        
         
     }
     else{

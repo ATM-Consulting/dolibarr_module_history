@@ -145,7 +145,9 @@ class modHistory extends DolibarrModules
             ,'thirdparty:-info:NU:true'
             ,'contact:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=contact&id=__ID__'
             ,'contact:-info:NU:true'
-        );
+            ,'action:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=action&id=__ID__'
+            ,'action:-info:NU:true'
+                    );
 
         // Dictionaries
 	    if (! isset($conf->history->enabled))

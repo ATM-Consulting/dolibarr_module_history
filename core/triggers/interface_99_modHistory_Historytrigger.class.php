@@ -127,20 +127,33 @@ class InterfaceHistorytrigger
             $h=new THistory;
             
             $type_object = $object->element;
-            if(substr($type_object,-3) == 'det') $type_object = substr($type_object,0,-3);
+            if(substr($type_object,-3) == 'det'){
+                $type_object = substr($type_object,0,-3);
+                if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
             
-            if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
-            else $h->fk_object = $object->id;
+            }
+            
+            if(empty($h->fk_object)) $h->fk_object = $object->id;
 		
     	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
-            if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
-            else $h->what_changed = 'cf. action';
+            else if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
+            else {
+                /*$db2=getDoliDBInstance($conf->db->type,$conf->db->host,$conf->db->user,$conf->db->pass,$conf->db->name,$conf->db->port);
+                
+                $class = get_class($object);
+                $oldObject = new $class($db2);
+                $oldObject->fetch($object->id);
+                $h->compare($object, $oldObject);    
+                  */  
+                $h->what_changed = 'cf. action';
+            
+            }
 
             $h->type_action = $action;
             $h->fk_user = $user->id;
             $h->type_object = $type_object;
             $h->save($PDOdb);
-                
+               
        }
        
       

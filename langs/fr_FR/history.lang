@@ -11,3 +11,5 @@ COMPANY_MODIFY=Société modifiée
 COMPANY_CREATE=Société créée
 CONTACT_MODIFY=Contact modifé
 CONTACT_CREATE=Contact créé
+ACTION_MODIFY=Evènement modifié
+ACTION_CREATE=Evènement créé
