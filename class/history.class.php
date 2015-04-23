@@ -25,6 +25,8 @@ class THistory extends TObjetStd {
     
     private function cmp(&$newO, &$oldO) {
         
+        if(empty($newO) || empty($oldO)) return '';
+        
         $diff = '';
      
         foreach($newO as $k=>$v) {

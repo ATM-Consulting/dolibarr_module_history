@@ -8,6 +8,7 @@
     dol_include_once('/core/lib/contact.lib.php');
     dol_include_once('/core/lib/agenda.lib.php');
     dol_include_once('/comm/action/class/actioncomm.class.php');
+    dol_include_once('/core/lib/product.lib.php');
     
     llxHeader('',$langs->trans('History'));
     
@@ -43,7 +44,7 @@
         $object->fetch($fk_object);
         
         if(function_exists($type_object.'_prepare_head')) {
-            $head = call_user_func($type_object.'_prepare_head', $object);
+            $head = call_user_func($type_object.'_prepare_head', $object, $user);
             dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);    
         }
         
