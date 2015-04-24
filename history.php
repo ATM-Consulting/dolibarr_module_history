@@ -9,6 +9,7 @@
     dol_include_once('/core/lib/agenda.lib.php');
     dol_include_once('/comm/action/class/actioncomm.class.php');
     dol_include_once('/core/lib/product.lib.php');
+    dol_include_once('/core/lib/company.lib.php');
     
     llxHeader('',$langs->trans('History'));
     
