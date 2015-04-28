@@ -96,5 +96,14 @@ class THistory extends TObjetStd {
         return $TRes;
         
     }
-    
+    static function addHistory(&$PDOdb, &$user, $type_object, $fk_object, $action, $what_changed = 'cf. action') {
+        
+            $h=new THistory;
+            $h->fk_object = $fk_object;
+            $h->what_changed = $what_changed;
+            $h->type_action = $action;
+            $h->fk_user = $user->id;
+            $h->type_object = $type_object;
+            $h->save($PDOdb);
+    }
 }
