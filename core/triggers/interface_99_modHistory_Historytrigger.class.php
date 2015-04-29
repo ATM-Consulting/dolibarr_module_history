@@ -134,7 +134,7 @@ class InterfaceHistorytrigger
             }
             
             if(empty($h->fk_object)) $h->fk_object = $object->id;
-		
+
     	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
             else if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
             else {
@@ -146,7 +146,7 @@ class InterfaceHistorytrigger
                 $h->compare($object, $oldObject);    
                   */  
                 $h->what_changed = 'cf. action';
-            
+           
             }
 
             $h->type_action = $action;
@@ -156,7 +156,6 @@ class InterfaceHistorytrigger
                
        }
        
-      
         return 0;
     }
 }

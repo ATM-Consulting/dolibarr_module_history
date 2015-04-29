@@ -24,16 +24,22 @@ class THistory extends TObjetStd {
     }
     
     private function cmp(&$newO, &$oldO) {
-        
+    	
         if(empty($newO) || empty($oldO)) return '';
         
         $diff = '';
      
         foreach($newO as $k=>$v) {
-    
+    		
             if(!is_array($v) && !is_object($v)) {
-                if(isset($oldO->{$k}) && !empty($v) && $oldO->{$k} != $v) {
-                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+			
+				//isset($oldO->{$k}) => renvoi false sur $oldO->zip car défini à null              
+                if(property_exists($oldO, $k) // vérifie que l'attribut exist    
+                	&& $v !== '' // TODO Si new val n'est pas vide mais c'est faux, la nouvelle valeur peut être vide 
+                	&& $oldO->{$k} !== $v 
+                	&& empty($oldO->{$k}) !== empty($v)) //ce test permet d'éviter d'enregistrer un changement si $oldO->effectif_id == null et que $v == 0
+            	{
+                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v.PHP_EOL;
                 }
     
             }
