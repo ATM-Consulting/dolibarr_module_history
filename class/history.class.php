@@ -35,11 +35,11 @@ class THistory extends TObjetStd {
 			
 				//isset($oldO->{$k}) => renvoi false sur $oldO->zip car défini à null              
                 if(property_exists($oldO, $k) // vérifie que l'attribut exist    
-                	&& $v !== '' // TODO Si new val n'est pas vide mais c'est faux, la nouvelle valeur peut être vide 
                 	&& $oldO->{$k} !== $v 
-                	&& empty($oldO->{$k}) !== empty($v)) //ce test permet d'éviter d'enregistrer un changement si $oldO->effectif_id == null et que $v == 0
+                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
+					)
             	{
-                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v.PHP_EOL;
+                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
                 }
     
             }
