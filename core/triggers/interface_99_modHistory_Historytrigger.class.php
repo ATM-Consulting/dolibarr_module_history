@@ -116,7 +116,7 @@ class InterfaceHistorytrigger
         // Put here code you want to execute when a Dolibarr business events occurs.
         // Data and type of action are stored into $object and $action
         // Users
-       
+	   
        if(!empty($object->element)) {
            
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
@@ -132,7 +132,7 @@ class InterfaceHistorytrigger
                 if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
             
             }
-            
+			
             if(empty($h->fk_object)) $h->fk_object = $object->id;
 
     	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
