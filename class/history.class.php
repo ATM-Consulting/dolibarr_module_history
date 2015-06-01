@@ -21,10 +21,10 @@ class THistory extends TObjetStd {
     {
     	$this->what_changed = '';
         $this->what_changed .= $this->cmp($newO, $oldO); 
-    	$this->what_changed .= $this->cmp_array_options($newO->array_options, $oldO->array_options);
+    	$this->what_changed .= $this->cmp($newO->array_options, $oldO->array_options, true);
     }
     
-    private function cmp(&$newO, &$oldO) 
+    private function cmp(&$newO, &$oldO, $checkArrayOptions = false) 
     {
         if(empty($newO) || empty($oldO)) return '';
         
@@ -34,14 +34,26 @@ class THistory extends TObjetStd {
         {
             if(!is_array($v) && !is_object($v)) 
             {
-				//isset($oldO->{$k}) => renvoi false sur $oldO->zip car défini à null              
-                if(property_exists($oldO, $k) // vérifie que l'attribut exist    
-                	&& $oldO->{$k} !== $v 
-                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
-					)
-            	{
-                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
-                }
+            	
+				if ($checkArrayOptions)
+				{
+					if($oldO[$k] !== $v && (!empty($v) || (!empty($oldO[$k]) &&  $oldO[$k] !== '0.000') ) )
+	            	{
+	            		// substr remove options_ 
+	                    $diff.=substr($k, 8).' : '.$oldO[$k].' => '.$v."\n";
+	                }
+				}
+				else
+				{
+					//isset($oldO->{$k}) => renvoi false sur $oldO->zip car défini à null              
+	                if(property_exists($oldO, $k) // vérifie que l'attribut exist    
+	                	&& $oldO->{$k} !== $v 
+	                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
+						)
+	            	{
+	                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+	                }	
+				}
     
             }
     
@@ -50,27 +62,6 @@ class THistory extends TObjetStd {
         return $diff;
     }
 	
-	private function cmp_array_options($newA, $oldA)
-	{
-		if(empty($newA) || empty($oldA)) return '';
-        
-        $diff = '';
-        foreach($newA as $k=>$v) 
-        {
-            if(!is_array($v) && !is_object($v)) 
-            {          
-                if($oldA[$k] !== $v && (!empty($v) || (!empty($oldA[$k]) &&  $oldA[$k] !== '0.000') ) )
-            	{
-            		// substr remove options_ 
-                    $diff.=substr($k, 8).' : '.$oldA[$k].' => '.$v."\n";
-                }    
-            }
-    
-        }
-
-        return $diff;
-	}
-
     function show_whatChanged() {
 	
 	return nl2br(htmlentities($this->what_changed));
