@@ -148,7 +148,9 @@ class InterfaceHistorytrigger
                 $h->what_changed = 'cf. action';
            
             }
-
+			
+			$h->setRef($object);
+			
             $h->type_action = $action;
             $h->fk_user = $user->id;
             $h->type_object = $type_object;
