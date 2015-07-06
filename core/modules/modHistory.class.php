@@ -152,7 +152,10 @@ class modHistory extends DolibarrModules
 
             ,'project:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=project&id=__ID__'
             ,'project:-info:NU:true'
-        );
+            
+            ,'task:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=task&id=__ID__'
+            ,'task:-info:NU:true'
+                    );
 
         // Dictionaries
 	    if (! isset($conf->history->enabled))

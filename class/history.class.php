@@ -102,6 +102,9 @@ class THistory extends TObjetStd {
     
     static function getHistory(&$PDOdb, $type_object, $fk_object) {
         
+        if($type_object == 'task') $type_object = 'project_task';
+        
+        
         $sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
          WHERE type_object='".$type_object."' AND fk_object=".(int)$fk_object." 
          ORDER BY date_entry DESC ";

@@ -16,3 +16,6 @@ ACTION_CREATE=Evènement créé
 SUPPLIER_PRODUCT_BUYPRICE_UPDATE=Mise à jour du prix fournisseur
 PRODUCT_PRICE_MODIFY=Mise à jour du prix produit
 PRODUCT_MODIFY=Produit modifié
+PROJECT_TASK_ADD_CONTACT=Ajout d'un contact sur la tâche
+TASK_MODIFY=Modification de la tâche
+TASK_CREATE=Création de la tâche

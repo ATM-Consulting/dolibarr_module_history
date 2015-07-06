@@ -11,6 +11,8 @@
     dol_include_once('/core/lib/product.lib.php');
     dol_include_once('/core/lib/company.lib.php');
     dol_include_once('/core/lib/project.lib.php');
+    dol_include_once('/projet/class/project.class.php');
+    dol_include_once('/projet/class/task.class.php');
     
     llxHeader('',$langs->trans('History'));
     
@@ -60,7 +62,7 @@
         
     }
     else{
-        exit('Erreur, ce type dobjet nest pas traité par le module');    
+        exit('Erreur, ce type d\'objet '.ucfirst($type_object).' n\'est pas traité par le module');    
         
     }
     
