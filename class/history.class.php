@@ -9,14 +9,20 @@ class THistory extends TObjetStd {
         $this->set_table(MAIN_DB_PREFIX.'history');
         $this->add_champs('fk_object','type=entier;index;');
         $this->add_champs('fk_user', 'type=entier;');
-        $this->add_champs('type_object,type_action', 'type=chaine;index;');
+        $this->add_champs('type_object,type_action,ref', 'type=chaine;index;');
         $this->add_champs('date_entry','type=date;');
         
         $this->_init_vars('what_changed');
         
         $this->start();
     }
-
+	function setRef(&$object) {
+		
+		if(!empty($object->code_client)) $this->ref = $object->code_client;
+		else if(!empty($object->facnumber)) $this->ref = $object->facnumber;
+		else if(!empty($object->ref)) $this->ref = $object->ref;
+		
+	}
     function compare(&$newO, &$oldO) 
     {
     	$this->what_changed = '';
