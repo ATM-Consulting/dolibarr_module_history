@@ -10,6 +10,7 @@
     dol_include_once('/comm/action/class/actioncomm.class.php');
     dol_include_once('/core/lib/product.lib.php');
     dol_include_once('/core/lib/company.lib.php');
+    dol_include_once('/core/lib/project.lib.php');
     
     llxHeader('',$langs->trans('History'));
     
@@ -35,6 +36,14 @@
         $object->fetch($fk_object);
         $head = actions_prepare_head($object);
         dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
+        
+    }
+    
+    else if($type_object=='project') {
+        $object = new Project($db);
+        $object->fetch($fk_object);
+        $head = project_prepare_head($object);
+        dol_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
         
     }
     

@@ -149,6 +149,9 @@ class modHistory extends DolibarrModules
             ,'action:-info:NU:true'
             ,'product:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=product&id=__ID__'
             ,'product:-info:NU:true'
+
+            ,'project:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=project&id=__ID__'
+            ,'project:-info:NU:true'
         );
 
         // Dictionaries
