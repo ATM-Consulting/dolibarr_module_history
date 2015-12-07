@@ -96,7 +96,7 @@ class modHistory extends DolibarrModules
 		$this->dirs = array();
 
 		// Config pages. Put here list of php page, stored into history/admin directory, to use to setup module.
-		$this->config_page_url = array("history_setup.php@history");
+		$this->config_page_url = false;
 
 		// Dependencies
 		$this->hidden = false;			// A condition to hide module
