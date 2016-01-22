@@ -8,6 +8,7 @@ class THistory extends TObjetStd {
     function __construct() {
         $this->set_table(MAIN_DB_PREFIX.'history');
         $this->add_champs('fk_object','type=entier;index;');
+        $this->add_champs('key_value1','type=float;index;');
         $this->add_champs('fk_user', 'type=entier;');
         $this->add_champs('type_object,type_action,ref', 'type=chaine;index;');
         $this->add_champs('date_entry','type=date;');
