@@ -80,7 +80,7 @@
             <th><?php echo $langs->trans('User') ?></th>
         </tr>
         
-    <?
+    <?php
     
     foreach($THistory as $h) {
         
@@ -91,7 +91,7 @@
             <td><?php echo $h->show_whatChanged() ?></td>
             <td><?php echo $h->show_user() ?></td>
         </tr>
-        <?
+        <?php
         
     }
     
