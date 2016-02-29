@@ -116,6 +116,7 @@ class InterfaceHistorytrigger
         // Put here code you want to execute when a Dolibarr business events occurs.
         // Data and type of action are stored into $object and $action
         // Users
+		
 	   
        if(!empty($object->element)) {
            
@@ -156,6 +157,32 @@ class InterfaceHistorytrigger
             $h->type_object = $type_object;
             $h->save($PDOdb);
                
+       }else{
+       	switch ($action){
+			case 'STOCK_MOVEMENT':
+				
+	            if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
+	            dol_include_once('/history/config.php');
+	            
+	            $PDOdb=new TPDOdb;
+	            
+	            $h=new THistory;
+				$produit = new Product($this->db);
+				$produit->fetch($object->product_id);
+			
+				$h->setRef($produit);
+				
+	            $h->type_action = $action;
+	            $h->fk_user = $user->id;
+	            $h->type_object = 'product';
+            	$h->fk_object = $produit->id;
+				$h->what_changed = 'pmp => '.$produit->pmp."\n".'qty_movement => '.$object->qty;
+				$h->key_value1 = $produit->pmp;
+				
+	            $h->save($PDOdb);
+				
+				break;
+       	}
        }
        
         return 0;
