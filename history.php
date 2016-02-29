@@ -70,28 +70,29 @@
     $PDOdb=new TPDOdb;
     
     $THistory = THistory::getHistory($PDOdb, $type_object, $fk_object)  ;
-    
-    ?>
+   
+	?>
     <table class="border" width="100%">
         <tr class="liste_titre">
-            <th><?php echo $langs->trans('Date') ?></th>
-            <th><?php echo $langs->trans('Action') ?></th>
-            <th><?php echo $langs->trans('WhatChanged') ?></th>
-            <th><?php echo $langs->trans('User') ?></th>
+            <td class="liste_titre"><?php echo $langs->trans('Date') ?></td>
+            <td class="liste_titre"><?php echo $langs->trans('Action') ?></td>
+            <td class="liste_titre"><?php echo $langs->trans('WhatChanged') ?></td>
+            <td class="liste_titre"><?php echo $langs->trans('User') ?></td>
         </tr>
         
-    <?
+    <?php
     
-    foreach($THistory as $h) {
+    $class = 'pair';
+    foreach($THistory as &$history) {
         
         ?>
         <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
-            <td><?php echo $h->get_date('date_entry','d/m/Y H:i:s'); ?></td>
-            <td><?php echo $h->show_action() ?></td>
-            <td><?php echo $h->show_whatChanged() ?></td>
-            <td><?php echo $h->show_user() ?></td>
+            <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
+            <td><?php echo $history->show_action() ?></td>
+            <td><?php echo $history->show_whatChanged() ?></td>
+            <td><?php echo $history->show_user() ?></td>
         </tr>
-        <?
+        <?php
         
     }
     
