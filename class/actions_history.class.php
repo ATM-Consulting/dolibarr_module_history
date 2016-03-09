@@ -61,28 +61,24 @@ class ActionsHistory
 	 */
 	function doActions($parameters, &$object, &$action, $hookmanager)
 	{
-		$error = 0; // Error counter
-		$myvalue = 'test'; // A result value
-
-		print_r($parameters);
-		echo "action: " . $action;
-		print_r($object);
-
-		if (in_array('somecontext', explode(':', $parameters['context'])))
+		
+		if (in_array('globalcard', explode(':', $parameters['context'])))
 		{
-		  // do something only for the context 'somecontext'
-		}
-
-		if (! $error)
-		{
-			$this->results = array('myreturn' => $myvalue);
-			$this->resprints = 'A text to show';
-			return 0; // or return 1 to replace standard code
-		}
-		else
-		{
-			$this->errors[] = 'Error message';
-			return -1;
+			
+			global $history_old_object,$conf;
+			
+			$history_old_object = clone $object;
+		  
+		  	if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE) && strpos($action,'delete')!==false) {
+		  		
+				if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
+            	dol_include_once('/history/config.php');
+				
+				$PDOdb=new TPDOdb;
+				THistory::makeCopy($PDOdb, $object);
+				
+		  	}
+		  
 		}
 	}
 }

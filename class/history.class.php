@@ -7,10 +7,11 @@ class THistory extends TObjetStd {
     
     function __construct() {
         $this->set_table(MAIN_DB_PREFIX.'history');
-        $this->add_champs('fk_object','type=entier;index;');
+        $this->add_champs('fk_object,fk_object_deleted',array('type'=>'integer','index'=>true));
         $this->add_champs('key_value1','type=float;index;');
         $this->add_champs('fk_user', 'type=entier;');
-        $this->add_champs('type_object,type_action,ref', 'type=chaine;index;');
+        $this->add_champs('type_object,type_action,ref,table_element', array('type'=>'string','index'=>true));
+		$this->add_champs('object', array('type'=>'array'));
         $this->add_champs('date_entry','type=date;');
         
         $this->_init_vars('what_changed');
@@ -54,6 +55,7 @@ class THistory extends TObjetStd {
 				{
 					//isset($oldO->{$k}) => renvoi false sur $oldO->zip car défini à null              
 	                if(property_exists($oldO, $k) // vérifie que l'attribut exist    
+	                	&& !is_object($oldO->{$k})
 	                	&& $oldO->{$k} !== $v 
 	                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
 						)
@@ -69,9 +71,18 @@ class THistory extends TObjetStd {
         return $diff;
     }
 	
-    function show_whatChanged() {
+    function show_whatChanged(&$PDOdb) {
 	
-	return nl2br(htmlentities($this->what_changed));
+		$r = nl2br(htmlentities($this->what_changed));
+	
+		if(!empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->getId().'">'.img_view().'</a>';
+		
+		$PDOdb->Execute("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
+		if($obj=$PDOdb->Get_line()) {
+			$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->getId().'">'.img_picto('Restore', 'refresh').'</a>';
+		}
+	
+		return $r; 
 	
     }
     
@@ -135,4 +146,67 @@ class THistory extends TObjetStd {
             $h->type_object = $type_object;
             $h->save($PDOdb);
     }
+	
+	static function restoreCopy(&$PDOdb,$id_to_restore) {
+		
+		$h=new THistory;
+		if($h->load($PDOdb, $id_to_restore )){
+			global $db,$langs;
+			
+			$table = MAIN_DB_PREFIX.$h->table_element;
+			$backup_table = $table.'_deletedhistory';
+			
+			$obj = new TObjetStd;
+			$obj->set_table($backup_table);
+			$obj->init_vars_by_db($PDOdb);
+			$obj->load($PDOdb, $h->fk_object_deleted);
+			
+			$obj2 = clone $obj;
+			
+			$obj2->set_table($table);
+			$obj2->init_db_by_vars($PDOdb);
+			$obj2->date_cre = $obj2->date_maj = time();
+					
+			$res = $PDOdb->Execute("INSERT INTO ".$table." (rowid) VALUES (".$h->fk_object_deleted.")");	
+			$obj2->save($PDOdb);
+			
+			setEventMessage($langs->trans("DeletedObjectRestored"));
+		}
+		
+	}
+	
+	static function makeCopy(&$PDOdb, &$object) {
+		
+		if(is_object($object) && !empty($object->table_element)){
+			
+			$table = MAIN_DB_PREFIX.$object->table_element;
+			$backup_table = $table.'_deletedhistory';
+			//$PDOdb->debug=true;
+			$obj = new TObjetStd;
+			$obj->set_table($table);
+			$obj->init_vars_by_db($PDOdb);
+			$obj->load($PDOdb, $object->id);
+	
+			$obj2 = clone $obj;
+			
+			$obj2->set_table($backup_table);
+			$obj2->init_db_by_vars($PDOdb);
+			$obj2->date_cre = $obj2->date_maj = time();
+					
+			$res = $PDOdb->Execute("INSERT INTO ".$backup_table." (rowid) VALUES (".$object->id.")");	
+			$obj2->save($PDOdb);
+			
+		}
+		
+		foreach($object as $k=>$v) {
+			
+			if(is_object($v) || is_array($v)) {
+				self::makeCopy($PDOdb, $v);
+			}
+			
+		}
+		
+		
+	}
+	
 }

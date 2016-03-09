@@ -71,6 +71,12 @@
     
     $THistory = THistory::getHistory($PDOdb, $type_object, $fk_object)  ;
    
+    if(GETPOST('restoreObject')>0) {
+    	
+		THistory::restoreCopy($PDOdb, GETPOST('restoreObject'));
+		
+    }
+   
 	?>
     <table class="border" width="100%">
         <tr class="liste_titre">
@@ -89,10 +95,16 @@
         <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
             <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
             <td><?php echo $history->show_action() ?></td>
-            <td><?php echo $history->show_whatChanged() ?></td>
+            <td><?php echo $history->show_whatChanged($PDOdb) ?></td>
             <td><?php echo $history->show_user() ?></td>
         </tr>
         <?php
+        
+        if(!empty($history->object) && GETPOST('showObject') == $history->getId()) {
+        	
+			echo '<tr><td colspan="4"><pre>'.print_r($history->object,true).'</pre></td></tr>';
+			
+        }
         
     }
     

@@ -89,6 +89,7 @@ class modHistory extends DolibarrModules
 		//                        );
 		$this->module_parts = array(
 		  'triggers' => 1
+		  ,'hooks'=>array('globalcard')
         );
 
 		// Data directories to create when module is enabled.
@@ -96,7 +97,7 @@ class modHistory extends DolibarrModules
 		$this->dirs = array();
 
 		// Config pages. Put here list of php page, stored into history/admin directory, to use to setup module.
-		$this->config_page_url = false;
+		$this->config_page_url = array('history_setup.php@history');
 
 		// Dependencies
 		$this->hidden = false;			// A condition to hide module

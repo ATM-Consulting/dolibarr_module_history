@@ -131,13 +131,21 @@ class InterfaceHistorytrigger
             if(substr($type_object,-3) == 'det'){
                 $type_object = substr($type_object,0,-3);
                 if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
-            
             }
 			
-            if(empty($h->fk_object)) $h->fk_object = $object->id;
+			if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE) && strpos($action,'DELETE')!==false) {
+				$h->object = clone $object;
+				$h->table_element = $object->table_element;
+				$h->fk_object_deleted = $object->id;
+			}
+
+	        if(empty($h->fk_object)) $h->fk_object = $object->id;
+
+			global $history_old_object;
 
     	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
             else if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
+			else if(!empty($history_old_object) && get_class( $history_old_object ) == get_class( $object) ) $h->compare($object, $history_old_object);
             else {
                 /*$db2=getDoliDBInstance($conf->db->type,$conf->db->host,$conf->db->user,$conf->db->pass,$conf->db->name,$conf->db->port);
                 
@@ -145,7 +153,7 @@ class InterfaceHistorytrigger
                 $oldObject = new $class($db2);
                 $oldObject->fetch($object->id);
                 $h->compare($object, $oldObject);    
-                  */  
+                */  
                 $h->what_changed = 'cf. action';
            
             }
@@ -155,7 +163,9 @@ class InterfaceHistorytrigger
             $h->type_action = $action;
             $h->fk_user = $user->id;
             $h->type_object = $type_object;
-            $h->save($PDOdb);
+			$h->save($PDOdb);
+			
+			
                
        }else{
        	switch ($action){
