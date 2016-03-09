@@ -13,13 +13,23 @@
     dol_include_once('/core/lib/project.lib.php');
     dol_include_once('/projet/class/project.class.php');
     dol_include_once('/projet/class/task.class.php');
-    
-    llxHeader('',$langs->trans('History'));
+    dol_include_once('/projet/class/task.class.php');
+   	dol_include_once('/fourn/class/fournisseur.commande.class.php');
+    dol_include_once('/fourn/class/fournisseur.facture.class.php');
+	dol_include_once('/fourn/class/fournisseur.product.class.php');
+	
+    llxHeader('',$langs->trans('HideletedElementstory'));
     
     $type_object = GETPOST('type_object');
     $fk_object = GETPOST('id');
     
-    if($type_object == 'propal') {
+	if($type_object == 'deletedElement') {
+		dol_include_once('/history/lib/history.lib.php');
+		$head = historyAdminPrepareHead($object);
+        dol_fiche_head($head, 'delted',$langs->trans("ModuleName"),  0,  "history@history");
+		
+	}
+	else if($type_object == 'propal') {
         $object = new Propal($db);
         $object->fetch($fk_object);
         $head = propal_prepare_head($object);
@@ -80,8 +90,11 @@
 	?>
     <table class="border" width="100%">
         <tr class="liste_titre">
-            <td class="liste_titre"><?php echo $langs->trans('Date') ?></td>
-            <td class="liste_titre"><?php echo $langs->trans('Action') ?></td>
+            <td class="liste_titre"><?php echo $langs->trans('Date') ?></td><?php
+            if($type_object == 'deletedElement') {
+            	echo '<td class="liste_titre">'.$langs->trans('Ref').'</td>';	
+			}
+            ?><td class="liste_titre"><?php echo $langs->trans('Action') ?></td>
             <td class="liste_titre"><?php echo $langs->trans('WhatChanged') ?></td>
             <td class="liste_titre"><?php echo $langs->trans('User') ?></td>
         </tr>
@@ -91,20 +104,35 @@
     $class = 'pair';
     foreach($THistory as &$history) {
         
-        ?>
-        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
-            <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
-            <td><?php echo $history->show_action() ?></td>
-            <td><?php echo $history->show_whatChanged($PDOdb) ?></td>
-            <td><?php echo $history->show_user() ?></td>
-        </tr>
-        <?php
-        
-        if(!empty($history->object) && GETPOST('showObject') == $history->getId()) {
-        	
-			echo '<tr><td colspan="4"><pre>'.print_r($history->object,true).'</pre></td></tr>';
+		if($type_object == 'deletedElement') {
+			        ?>
+			        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
+			            <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
+			            <td><?php echo $history->show_ref() ?></td>
+			            <td><?php echo $history->show_action() ?></td>
+			            <td><?php echo $history->show_whatChanged($PDOdb, false, true) ?></td>
+			            <td><?php echo $history->show_user() ?></td>
+			        </tr>
+					<?php			       
+						
+		}
+		else {
+	        ?>
+	        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
+	            <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
+	            <td><?php echo $history->show_action() ?></td>
+	            <td><?php echo $history->show_whatChanged($PDOdb) ?></td>
+	            <td><?php echo $history->show_user() ?></td>
+	        </tr>
+	        <?php
+	        
+	        if(!empty($history->object) && GETPOST('showObject') == $history->getId()) {
+	        	unset($history->object->db);
+				echo '<tr><td colspan="4"><pre>'.print_r($history->object,true).'</pre></td></tr>';
+				
+	        }
 			
-        }
+		}		
         
     }
     

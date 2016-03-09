@@ -17,7 +17,35 @@ class THistory extends TObjetStd {
         $this->_init_vars('what_changed');
         
         $this->start();
-    }
+    
+	}
+	
+	function show_ref() {
+		global $db,$user,$conf,$langs;
+		
+		dol_include_once('/'.$this->type_object.'/class/'.$this->type_object.'.class.php');
+		
+		$class = ucfirst($this->type_object);
+        
+		if($class=='Project_task') $class='Task';
+		else if($class=='Order_supplier') $class='CommandeFournisseur';
+		else if($class=='Invoice_supplier') $class='FactureFournisseur';
+		
+		if(!class_exists($class )) return $langs->trans('CantInstanciate').' : '.	$class;	
+        $object=new $class($db);
+        
+        $res = $object->fetch($this->fk_object);
+        
+		if($res<=0 || $object->id == 0) {
+			return $langs->trans('WholeObjectDeleted');
+		}
+		
+        if(method_exists($object, 'getNomUrl')) {
+            return $object->getNomUrl(1);    
+        }
+		
+	}
+	
 	function setRef(&$object) {
 		
 		if(!empty($object->code_client)) $this->ref = $object->code_client;
@@ -71,17 +99,26 @@ class THistory extends TObjetStd {
         return $diff;
     }
 	
-    function show_whatChanged(&$PDOdb) {
+    function show_whatChanged(&$PDOdb, $show_details = true, $show_restore = true) {
+	global $conf,$user;
 	
 		$r = nl2br(htmlentities($this->what_changed));
 	
-		if(!empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->getId().'">'.img_view().'</a>';
 		
-		$PDOdb->Execute("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
-		if($obj=$PDOdb->Get_line()) {
-			$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->getId().'">'.img_picto('Restore', 'refresh').'</a>';
+		if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE)) {
+			if($show_details && !empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->getId().'">'.img_view().'</a>';
+			
+			if($show_restore && !empty($user->rights->history->restore)) {
+				$PDOdb->Execute("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
+				if($obj=$PDOdb->Get_line()) {
+					$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->getId().'">'.img_picto('Restore', 'refresh').'</a>';
+				}
+				
+			}
+			
 		}
 	
+
 		return $r; 
 	
     }
@@ -116,10 +153,20 @@ class THistory extends TObjetStd {
         
         if($type_object == 'task') $type_object = 'project_task';
         
+		if($type_object=='deletedElement') {
+			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
+	         WHERE type_action LIKE '%DELETE%' 
+	         ORDER BY date_entry DESC";
+			
+		}
+		else{
+			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
+	         WHERE type_object='".$type_object."' AND fk_object=".(int)$fk_object." 
+	         ORDER BY date_entry DESC ";
+			
+			
+		}
         
-        $sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
-         WHERE type_object='".$type_object."' AND fk_object=".(int)$fk_object." 
-         ORDER BY date_entry DESC ";
         
         $Tab = $PDOdb->ExecuteAsArray($sql);
         
@@ -166,8 +213,8 @@ class THistory extends TObjetStd {
 			$obj2->set_table($table);
 			$obj2->init_db_by_vars($PDOdb);
 			$obj2->date_cre = $obj2->date_maj = time();
-					
-			$res = $PDOdb->Execute("INSERT INTO ".$table." (rowid) VALUES (".$h->fk_object_deleted.")");	
+			
+			$PDOdb->insertMode ='REPLACE';		
 			$obj2->save($PDOdb);
 			
 			setEventMessage($langs->trans("DeletedObjectRestored"));

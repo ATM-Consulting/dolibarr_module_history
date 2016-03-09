@@ -36,6 +36,13 @@ function historyAdminPrepareHead()
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'settings';
     $h++;
+	
+	$head[$h][0] = dol_buildpath("/history/history.php?type_object=deletedElement", 1);
+    $head[$h][1] = $langs->trans("DeletedElement");
+    $head[$h][2] = 'delted';
+    $h++;
+	
+	
     $head[$h][0] = dol_buildpath("/history/admin/history_about.php", 1);
     $head[$h][1] = $langs->trans("About");
     $head[$h][2] = 'about';
