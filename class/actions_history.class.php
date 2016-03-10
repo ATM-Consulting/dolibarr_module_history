@@ -74,6 +74,12 @@ class ActionsHistory
 				if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
             	dol_include_once('/history/config.php');
 				
+				if($object->id <= 0) {
+					
+					if(!empty($parameters['id']) && method_exists($object, 'fetch')) $object->fetch($parameters['id']);
+					
+				}
+				
 				$PDOdb=new TPDOdb;
 				THistory::makeCopy($PDOdb, $object);
 				

@@ -213,10 +213,10 @@ class THistory extends TObjetStd {
 			$obj2->set_table($table);
 			$obj2->init_db_by_vars($PDOdb);
 			$obj2->date_cre = $obj2->date_maj = time();
-			
+			$PDOdb->debug = true;
 			$PDOdb->insertMode ='REPLACE';		
 			$obj2->save($PDOdb);
-			
+			exit;
 			setEventMessage($langs->trans("DeletedObjectRestored"));
 		}
 		
