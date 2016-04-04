@@ -62,7 +62,7 @@ class ActionsHistory
 	function doActions($parameters, &$object, &$action, $hookmanager)
 	{
 		
-		if (in_array('globalcard', explode(':', $parameters['context'])))
+		if (!empty($object) && in_array('globalcard', explode(':', $parameters['context'])))
 		{
 			
 			global $history_old_object,$conf;
