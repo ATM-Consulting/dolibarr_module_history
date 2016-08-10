@@ -142,21 +142,29 @@ class modHistory extends DolibarrModules
         $this->tabs = array(
             'propal:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=propal&id=__ID__'
             ,'propal:-info:NU:true'
+
             ,'thirdparty:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=societe&id=__ID__'
             ,'thirdparty:-info:NU:true'
+
             ,'contact:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=contact&id=__ID__'
             ,'contact:-info:NU:true'
+
             ,'action:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=action&id=__ID__'
             ,'action:-info:NU:true'
+
             ,'product:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=product&id=__ID__'
             ,'product:-info:NU:true'
 
             ,'project:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=project&id=__ID__'
             ,'project:-info:NU:true'
-            
+
             ,'task:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=task&id=__ID__'
             ,'task:-info:NU:true'
-                    );
+
+ 			,'order:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=order&id=__ID__'
+            ,'order:-info:NU:true'
+
+        );
 
         // Dictionaries
 	    if (! isset($conf->history->enabled))
@@ -277,9 +285,9 @@ class modHistory extends DolibarrModules
 
         define('INC_FROM_DOLIBARR',true);
         dol_include_once('/history/config.php');
-        
+
         $PDOdb=new TPDOdb;
-        
+
         $o=new THistory($db);
         $o->init_db_by_vars($PDOdb);
 
