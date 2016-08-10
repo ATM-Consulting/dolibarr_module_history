@@ -17,8 +17,10 @@
    	dol_include_once('/fourn/class/fournisseur.commande.class.php');
     dol_include_once('/fourn/class/fournisseur.facture.class.php');
 	dol_include_once('/fourn/class/fournisseur.product.class.php');
-	dol_include_once('/commande/class/commande.class.php');
-	dol_include_once('/core/lib/order.lib.php');
+
+	//TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
+	//dol_include_once('/commande/class/commande.class.php');
+	//dol_include_once('/core/lib/order.lib.php');
 
 
     llxHeader('',$langs->trans('HideletedElementstory'));
@@ -63,6 +65,7 @@
     }
 
     /*else if($type_object=='order') {
+     //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
     	$object = new Commande($db);
     	$object->fetch($fk_object);
     	$head = commande_prepare_head($object);
