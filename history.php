@@ -18,11 +18,11 @@
     dol_include_once('/fourn/class/fournisseur.facture.class.php');
 	dol_include_once('/fourn/class/fournisseur.product.class.php');
 
-	//TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
-	//dol_include_once('/commande/class/commande.class.php');
-	//dol_include_once('/core/lib/order.lib.php');
-
-
+	if(DOL_VERSION>5) {
+		dol_include_once('/commande/class/commande.class.php');
+		dol_include_once('/core/lib/order.lib.php');
+	}
+	
     llxHeader('',$langs->trans('HideletedElementstory'));
 
     $type_object = GETPOST('type_object');
@@ -90,14 +90,11 @@
 
     }
 
-
-    $PDOdb=new TPDOdb;
-
-    $THistory = THistory::getHistory($PDOdb, $type_object, $fk_object)  ;
+    $THistory = DeepHistory::getHistory($type_object, $fk_object)  ;
 
     if(GETPOST('restoreObject')>0) {
 
-		THistory::restoreCopy($PDOdb, GETPOST('restoreObject'));
+		DeepHistory::restoreCopy(GETPOST('restoreObject'));
 
     }
 
@@ -121,7 +118,7 @@
 		if($type_object == 'deletedElement') {
 			        ?>
 			        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
-			            <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
+			            <td><?php echo $history->get_date('date_entry','dayhoursec'); ?></td>
 			            <td><?php echo $history->show_ref() ?></td>
 			            <td><?php echo $history->show_action() ?></td>
 			            <td><?php echo $history->show_whatChanged($PDOdb, false, true) ?></td>
@@ -133,7 +130,7 @@
 		else {
 	        ?>
 	        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
-	            <td><?php echo $history->get_date('date_entry','d/m/Y H:i:s'); ?></td>
+	            <td><?php echo $history->get_date('date_entry','dayhoursec'); ?></td>
 	            <td><?php echo $history->show_action() ?></td>
 	            <td><?php echo $history->show_whatChanged($PDOdb) ?></td>
 	            <td><?php echo $history->show_user() ?></td>

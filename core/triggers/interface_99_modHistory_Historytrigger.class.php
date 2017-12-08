@@ -123,11 +123,7 @@ class InterfaceHistorytrigger
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
             if(!dol_include_once('/history/config.php')) return 0;
             
-			
-			
-            $PDOdb=new TPDOdb;
-            
-            $h=new THistory;
+            $h=new DeepHistory($object->db);
             
             $type_object = $object->element;
             if(substr($type_object,-3) == 'det'){
@@ -149,13 +145,7 @@ class InterfaceHistorytrigger
             else if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
 			else if(!empty($history_old_object) && get_class( $history_old_object ) == get_class( $object) ) $h->compare($object, $history_old_object);
             else {
-                /*$db2=getDoliDBInstance($conf->db->type,$conf->db->host,$conf->db->user,$conf->db->pass,$conf->db->name,$conf->db->port);
                 
-                $class = get_class($object);
-                $oldObject = new $class($db2);
-                $oldObject->fetch($object->id);
-                $h->compare($object, $oldObject);    
-                */  
                 $h->what_changed = 'cf. action';
            
             }
@@ -165,8 +155,10 @@ class InterfaceHistorytrigger
             $h->type_action = $action;
             $h->fk_user = $user->id;
             $h->type_object = $type_object;
-			$h->save($PDOdb);
-			
+			$res = $h->create($user);
+			if($res<=0) {
+				var_dump($h);exit;
+			}
 			
                
        }else{
@@ -176,9 +168,7 @@ class InterfaceHistorytrigger
 	            if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
 	            dol_include_once('/history/config.php');
 	            
-	            $PDOdb=new TPDOdb;
-	            
-	            $h=new THistory;
+	            $h=new DeepHistory($object->db);
 				$produit = new Product($this->db);
 				$produit->fetch($object->product_id);
 			
@@ -191,7 +181,7 @@ class InterfaceHistorytrigger
 				$h->what_changed = 'pmp => '.$produit->pmp."\n".'qty_movement => '.$object->qty;
 				$h->key_value1 = $produit->pmp;
 				
-	            $h->save($PDOdb);
+				$h->create($user);
 				
 				break;
        	}
