@@ -120,7 +120,7 @@ class DeepHistory extends SeedObject {
 
 			if($show_restore && !empty($user->rights->history->restore)) {
 				$res = $this->db->query("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
-				if($obj=$this->db->fetch_object) {
+				if($obj=$this->db->fetch_object($res)) {
 					$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->getId().'">'.img_picto('Restore', 'refresh').'</a>';
 				}
 
@@ -196,7 +196,7 @@ class DeepHistory extends SeedObject {
 
     }
     static function addHistory(&$user, $type_object, $fk_object, $action, $what_changed = 'cf. action') {
-		global $user,$db;
+		global $db;
     	
             $h=new DeepHistory($db);
             $h->fk_object = $fk_object;
