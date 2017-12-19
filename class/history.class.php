@@ -1,23 +1,33 @@
 <?php
 
-class THistory extends TObjetStd {
+class DeepHistory extends SeedObject {
 /*
  * Gestion des équipements
  * */
 
-    function __construct() {
-        $this->set_table(MAIN_DB_PREFIX.'history');
-        $this->add_champs('fk_object,fk_object_deleted',array('type'=>'integer','index'=>true));
-        $this->add_champs('key_value1','type=float;index;');
-        $this->add_champs('fk_user', 'type=entier;');
-        $this->add_champs('type_object,type_action,ref,table_element', array('type'=>'string','index'=>true));
-		$this->add_champs('object', array('type'=>'array'));
-        $this->add_champs('date_entry','type=date;');
-        $this->add_champs('what_changed',array('type'=>'text'));
-
-        $this->_init_vars();
-
-        $this->start();
+	public $table_element = 'history';
+	
+	function __construct($db) {
+    	
+    	$this->db = $db;
+    	
+    	$this->fields=array(
+        		'fk_object'=>array('type'=>'integer','index'=>true)
+        		,'fk_object_deleted'=>array('type'=>'integer','index'=>true)
+        		,'key_value1'=>array('type'=>'float','index'=>true)
+        		,'fk_user'=>array('type'=>'integer')
+        		,'type_object'=>array('type'=>'string','length'=>50,'index'=>true)
+        		,'type_action'=>array('type'=>'string','length'=>50,'index'=>true)
+        		,'ref'=>array('type'=>'string','length'=>50,'index'=>true)
+        		,'table_object'=>array('type'=>'string','length'=>50,'index'=>true)
+        		,'object'=>array('type'=>'array')
+        		,'date_entry'=>array('type'=>'date')
+        		,'what_changed'=>array('type'=>'text')
+        );
+        		
+        $this->init();
+        
+        $this->key_value1 = 0;
 
 	}
 
@@ -100,18 +110,17 @@ class THistory extends TObjetStd {
         return $diff;
     }
 
-    function show_whatChanged(&$PDOdb, $show_details = true, $show_restore = true) {
+    function show_whatChanged($show_details = true, $show_restore = true) {
 	global $conf,$user;
 
 		$r = nl2br(htmlentities($this->what_changed));
-
 
 		if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE)) {
 			if($show_details && !empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->getId().'">'.img_view().'</a>';
 
 			if($show_restore && !empty($user->rights->history->restore)) {
-				$PDOdb->Execute("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
-				if($obj=$PDOdb->Get_line()) {
+				$res = $this->db->query("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
+				if($obj=$this->db->fetch_object($res)) {
 					$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->getId().'">'.img_picto('Restore', 'refresh').'</a>';
 				}
 
@@ -129,29 +138,30 @@ class THistory extends TObjetStd {
         $action='';
 
         $action = $langs->trans($this->type_action);
-//var_dump($this);
+
         return $action;
     }
 
     function show_user() {
-        global $db;
-
-        $u=new User($db);
+        
+        $u=new User($this->db);
         $u->fetch($this->fk_user);
 
         return $u->getLoginUrl(1);
 
     }
 
-    function save(&$PDOdb) {
-
+    function save(&$user) {
+    	
         if(empty($this->fk_user) || empty($this->fk_object) || empty($this->type_action) || empty($this->what_changed)) return false;
 
-        return parent::save($PDOdb);
+        return $this->id>0 ? $this->updateCommon($user) : $this->createCommon($user);
     }
 
-    static function getHistory(&$PDOdb, $type_object, $fk_object) {
+    static function getHistory($type_object, $fk_object) {
 
+    	global $db;
+    	
         if($type_object == 'task') $type_object = 'project_task';
 
 		if($type_object=='deletedElement') {
@@ -164,94 +174,183 @@ class THistory extends TObjetStd {
 			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
 	         WHERE type_object='".$type_object."' AND fk_object=".(int)$fk_object."
 	         ORDER BY date_entry DESC ";
-
-
 		}
 
+		$res = $db->query($sql);
 
-        $Tab = $PDOdb->ExecuteAsArray($sql);
-
-        $TRes=array();
-        foreach($Tab as $row){
-
-            $h=new THistory;
-            $h->load($PDOdb, $row->rowid);
-
-            $TRes[] = $h;
-
-        }
-
+		$TRes=array();
+		while($obj = $db->fetch_object($res)) {
+			
+			$h=new DeepHistory($db);
+			if($h->fetch($obj->rowid)>0) {
+			
+				$TRes[] = $h;
+			
+			}
+			else{
+				var_dump($h);exit;
+			}
+		}
+		
         return $TRes;
 
     }
-    static function addHistory(&$PDOdb, &$user, $type_object, $fk_object, $action, $what_changed = 'cf. action') {
-
-            $h=new THistory;
+    static function addHistory(&$user, $type_object, $fk_object, $action, $what_changed = 'cf. action') {
+		global $db;
+    	
+            $h=new DeepHistory($db);
             $h->fk_object = $fk_object;
             $h->what_changed = $what_changed;
             $h->type_action = $action;
             $h->fk_user = $user->id;
             $h->type_object = $type_object;
-            $h->save($PDOdb);
+            $h->create($user);
     }
 
-	static function restoreCopy(&$PDOdb,$id_to_restore) {
-
-		$h=new THistory;
-		if($h->load($PDOdb, $id_to_restore )){
-			global $db,$langs;
-
-			$table = MAIN_DB_PREFIX.$h->table_element;
+	static function restoreCopy($id_to_restore) {
+		global $user,$db,$langs;
+		
+		$h=new DeepHistory($db);
+		if($h->fetch($id_to_restore )){
+			
+			$table = $h->table_object;
 			$backup_table = $table.'_deletedhistory';
 
-			$obj = new TObjetStd;
-			$obj->set_table($backup_table);
-			$obj->init_vars_by_db($PDOdb);
-			$obj->load($PDOdb, $h->fk_object_deleted);
+			$obj = new SeedObject($db);
+			$obj->table_object= $backup_table;
+			$obj->init_vars_by_db();
+			$obj->fetch( $h->fk_object_deleted );
 
 			$obj2 = clone $obj;
 
-			$PDOdb->Execute("set foreign_key_checks = 0");
+			$db->query("set foreign_key_checks = 0");
 
-			$obj2->set_table($table);
-			$obj2->init_db_by_vars($PDOdb);
-			$obj2->date_cre = $obj2->date_maj = time();
-//			$PDOdb->debug = true;
-			$PDOdb->insertMode ='REPLACE';
-			$obj2->save($PDOdb);
-//			exit;
+			$obj2->table_object= $table;
+			$obj2->init_db_by_vars();
+			$obj2->date_creation = $obj2->tms = time();
+			
+			$obj2->replaceCommon($user);
+
 			setEventMessage($langs->trans("DeletedObjectRestored"));
 		}
 
 	}
+	
+	private function replaceCommon(User $user, $notrigger = false)
+	{
+		global $langs;
+		
+		$error = 0;
+		
+		$now=dol_now();
+		
+		$fieldvalues = $this->set_save_query();
+		if (array_key_exists('date_creation', $fieldvalues) && empty($fieldvalues['date_creation'])) $fieldvalues['date_creation']=$this->db->idate($now);
+		if (array_key_exists('fk_user_creat', $fieldvalues) && ! ($fieldvalues['fk_user_creat'] > 0)) $fieldvalues['fk_user_creat']=$user->id;
+		unset($fieldvalues['rowid']);	// The field 'rowid' is reserved field name for autoincrement field so we don't need it into insert.
+		
+		$keys=array();
+		$values = array();
+		foreach ($fieldvalues as $k => $v) {
+			$keys[$k] = $k;
+			$value = $this->fields[$k];
+			$values[$k] = $this->quote($v, $value);
+		}
+		
+		// Clean and check mandatory
+		foreach($keys as $key)
+		{
+			// If field is an implicit foreign key field
+			if (preg_match('/^integer:/i', $this->fields[$key]['type']) && $values[$key] == '-1') $values[$key]='';
+			if (! empty($this->fields[$key]['foreignkey']) && $values[$key] == '-1') $values[$key]='';
+			
+			//var_dump($key.'-'.$values[$key].'-'.($this->fields[$key]['notnull'] == 1));
+			if ($this->fields[$key]['notnull'] == 1 && empty($values[$key]))
+			{
+				$error++;
+				$this->errors[]=$langs->trans("ErrorFieldRequired", $this->fields[$key]['label']);
+			}
+			
+			// If field is an implicit foreign key field
+			if (preg_match('/^integer:/i', $this->fields[$key]['type']) && empty($values[$key])) $values[$key]='null';
+			if (! empty($this->fields[$key]['foreignkey']) && empty($values[$key])) $values[$key]='null';
+		}
+		
+		if ($error) return -1;
+		
+		$this->db->begin();
+		
+		if (! $error)
+		{
+			$sql = 'REPLACE INTO '.MAIN_DB_PREFIX.$this->table_element;
+			$sql.= ' ('.implode( ", ", $keys ).')';
+			$sql.= ' VALUES ('.implode( ", ", $values ).')';
+			
+			$res = $this->db->query($sql);
+			if ($res===false) {
+				$error++;
+				$this->errors[] = $this->db->lasterror();
+			}
+		}
+		
+		if (! $error)
+		{
+			$this->id = $this->db->last_insert_id(MAIN_DB_PREFIX . $this->table_element);
+		}
+		
+		if (! $error)
+		{
+			$result=$this->insertExtraFields();
+			if ($result < 0) $error++;
+		}
+		
+		if (! $error && ! $notrigger)
+		{
+			// Call triggers
+			$result=$this->call_trigger(strtoupper(get_class($this)).'_CREATE',$user);
+			if ($result < 0) { $error++; }
+			// End call triggers
+		}
+		
+		// Commit or rollback
+		if ($error) {
+			$this->db->rollback();
+			return -1;
+		} else {
+			$this->db->commit();
+			return $this->id;
+		}
+	}
+	
 
-	static function makeCopy(&$PDOdb, &$object) {
+	static function makeCopy(&$object) {
 
 		if(is_object($object) && !empty($object->table_element)){
 
-			$table = MAIN_DB_PREFIX.$object->table_element;
+			$table = $h->table_object;
 			$backup_table = $table.'_deletedhistory';
-			//$PDOdb->debug=true;
-			$obj = new TObjetStd;
-			$obj->set_table($table);
-			$obj->init_vars_by_db($PDOdb);
-			$obj->load($PDOdb, $object->id);
-
+			
+			$obj = new SeedObject($db);
+			$obj->table_object= $table;
+			$obj->init_vars_by_db();
+			$obj->fetch( $object->id );
+			
 			$obj2 = clone $obj;
-
-			$obj2->set_table($backup_table);
-			$obj2->init_db_by_vars($PDOdb);
-			$obj2->date_cre = $obj2->date_maj = time();
-
-			$res = $PDOdb->Execute("INSERT INTO ".$backup_table." (rowid) VALUES (".$object->id.")");
-			$obj2->save($PDOdb);
+			
+			$db->query("set foreign_key_checks = 0");
+			
+			$obj2->table_object= $backup_table;
+			$obj2->init_db_by_vars();
+			$obj2->date_creation = $obj2->tms = time();
+			
+			$obj2->replaceCommon($user);
 
 		}
 
 		foreach($object as $k=>$v) {
 
 			if(is_object($v) || is_array($v)) {
-				self::makeCopy($PDOdb, $v);
+				self::makeCopy($v);
 			}
 
 		}

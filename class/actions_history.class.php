@@ -80,8 +80,7 @@ class ActionsHistory
 					
 				}
 				
-				$PDOdb=new TPDOdb;
-				THistory::makeCopy($PDOdb, $object);
+				DeepHistory::makeCopy($object);
 				
 		  	}
 		  

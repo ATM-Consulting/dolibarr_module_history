@@ -287,10 +287,10 @@ class modHistory extends DolibarrModules
         define('INC_FROM_DOLIBARR',true);
         dol_include_once('/history/config.php');
 
-        $PDOdb=new TPDOdb;
-
-        $o=new THistory($db);
-        $o->init_db_by_vars($PDOdb);
+        global $db;
+        
+        $o=new DeepHistory($db);
+        $o->init_db_by_vars();
 
 		$result=$this->_load_tables('/history/sql/');
 
