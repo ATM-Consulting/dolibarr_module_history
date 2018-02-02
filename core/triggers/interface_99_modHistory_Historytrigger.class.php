@@ -117,13 +117,17 @@ class InterfaceHistorytrigger
         // Data and type of action are stored into $object and $action
         // Users
 		
-	   
+       $db = &$object->db;
+       if(is_null($db)) {
+           $db = &$this->db;
+       }
+       
        if(!empty($object->element)) {
            
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
             if(!dol_include_once('/history/config.php')) return 0;
             
-            $h=new DeepHistory($object->db);
+            $h=new DeepHistory($db);
             
             $type_object = $object->element;
             if(substr($type_object,-3) == 'det'){
@@ -168,8 +172,8 @@ class InterfaceHistorytrigger
 	            if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
 	            dol_include_once('/history/config.php');
 	            
-	            $h=new DeepHistory($object->db);
-				$produit = new Product($this->db);
+	            $h=new DeepHistory($db);
+	            $produit = new Product($db);
 				$produit->fetch($object->product_id);
 			
 				$h->setRef($produit);
