@@ -324,7 +324,7 @@ class DeepHistory extends SeedObject {
 	
 
 	static function makeCopy(&$object) {
-
+		global $db;
 		if(is_object($object) && !empty($object->table_element)){
 
 			$table = $h->table_object;
