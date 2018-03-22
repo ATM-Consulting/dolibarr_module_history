@@ -161,7 +161,7 @@ class InterfaceHistorytrigger
             $h->type_object = $type_object;
 			$res = $h->create($user);
 			if($res<=0) {
-				var_dump($h);exit;
+				//var_dump($h);exit;
 			}
 			
                
