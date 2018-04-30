@@ -13,6 +13,8 @@ CONTACT_MODIFY=Contact modifé
 CONTACT_CREATE=Contact créé
 ACTION_MODIFY=Evènement modifié
 ACTION_CREATE=Evènement créé
+CATEGORY_LINK=Liaison de la catégorie
+CATEGORY_UNLINK =Détachement de la catégorie
 SUPPLIER_PRODUCT_BUYPRICE_UPDATE=Mise à jour du prix fournisseur
 PRODUCT_PRICE_MODIFY=Mise à jour du prix produit
 PRODUCT_MODIFY=Produit modifié
@@ -30,3 +32,6 @@ PRODUCT_SET_MULTILANGS=Mise à jour des traductions
 
 DeletedElement=Elements supprimés
 WholeObjectDeleted=Objet complet supprimé
+
+CategLinked = Catégorie liée
+CategUnlinked = Catégorie détachée
