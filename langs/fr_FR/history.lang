@@ -29,6 +29,8 @@ LINEPROPAL_DELETE=Suppression de la ligne de propale
 COMPANY_DELETE=Société supprimée
 PRODUCT_CREATE=Création du produit
 PRODUCT_SET_MULTILANGS=Mise à jour des traductions
+COMPANY_ADD_COMMERCIAL=Ajout d'un commercial
+COMPANY_DEL_COMMERCIAL=Détachement d'un commercial
 
 DeletedElement=Elements supprimés
 WholeObjectDeleted=Objet complet supprimé

@@ -121,7 +121,6 @@ class InterfaceHistorytrigger
        if(is_null($db)) {
            $db = &$this->db;
        }
-	  
        if(!empty($object->element)) {
            
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
@@ -167,6 +166,18 @@ class InterfaceHistorytrigger
 				
 				if($action == 'CATEGORY_LINK')$h->what_changed = $langs->transnoentitiesnoconv('CategLinked')." ==> $objsrc->label";
 				if($action == 'CATEGORY_UNLINK')$h->what_changed = $langs->transnoentitiesnoconv('CategUnlinked')." ==> $objsrc->label";
+				
+			}
+			if($action == 'COMPANY_ADD_COMMERCIAL' || $action == 'COMPANY_DEL_COMMERCIAL'){
+				$langs->load('history@history');
+				
+				$h->fk_object = $object->id;
+				$type_object= $object->element;
+				$usrtarget = new User($db);
+				$usrtarget->fetch($object->commercial_modified);
+				$label = $usrtarget->lastname.' '.$usrtarget->firstname;
+				if($action == 'COMPANY_ADD_COMMERCIAL')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_ADD_COMMERCIAL')." ==> $label";
+				if($action == 'COMPANY_DEL_COMMERCIAL')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_DEL_COMMERCIAL')." ==> $label";
 				
 			}
 			$h->setRef($object);
