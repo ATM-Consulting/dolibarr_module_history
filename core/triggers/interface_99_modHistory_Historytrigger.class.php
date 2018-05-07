@@ -168,16 +168,16 @@ class InterfaceHistorytrigger
 				if($action == 'CATEGORY_UNLINK')$h->what_changed = $langs->transnoentitiesnoconv('CategUnlinked')." ==> $objsrc->label";
 				
 			}
-			if($action == 'COMPANY_ADD_COMMERCIAL' || $action == 'COMPANY_DEL_COMMERCIAL'){
+			if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE' || $action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE'){
 				$langs->load('history@history');
-				
+			
 				$h->fk_object = $object->id;
 				$type_object= $object->element;
 				$usrtarget = new User($db);
-				$usrtarget->fetch($object->commercial_modified);
+				$usrtarget->fetch($object->context['commercial_modified']);
 				$label = $usrtarget->lastname.' '.$usrtarget->firstname;
-				if($action == 'COMPANY_ADD_COMMERCIAL')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_ADD_COMMERCIAL')." ==> $label";
-				if($action == 'COMPANY_DEL_COMMERCIAL')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_DEL_COMMERCIAL')." ==> $label";
+				if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_LINK_SALE_REPRESENTATIVE')." ==> $label";
+				if($action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_UNLINK_SALE_REPRESENTATIVE')." ==> $label";
 				
 			}
 			$h->setRef($object);
