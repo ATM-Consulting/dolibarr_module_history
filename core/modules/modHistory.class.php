@@ -162,8 +162,8 @@ class modHistory extends DolibarrModules
             ,'task:-info:NU:true'
 
             //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
- 			//,'order:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=order&id=__ID__'
-            //,'order:-info:NU:true'
+ 			,'order:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=commande&id=__ID__'
+            ,'order:-info:NU:true'
 
         );
 
