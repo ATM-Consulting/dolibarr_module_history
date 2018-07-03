@@ -121,7 +121,7 @@
 			            <td><?php echo $history->get_date('date_entry','dayhoursec'); ?></td>
 			            <td><?php echo $history->show_ref() ?></td>
 			            <td><?php echo $history->show_action() ?></td>
-			            <td><?php echo $history->show_whatChanged($PDOdb, false, true) ?></td>
+			            <td><?php echo html_entity_decode($history->show_whatChanged($PDOdb, false, true)) ?></td>
 			            <td><?php echo $history->show_user() ?></td>
 			        </tr>
 					<?php
@@ -132,7 +132,7 @@
 	        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
 	            <td><?php echo $history->get_date('date_entry','dayhoursec'); ?></td>
 	            <td><?php echo $history->show_action() ?></td>
-	            <td><?php echo $history->show_whatChanged($PDOdb) ?></td>
+	            <td><?php echo html_entity_decode($history->show_whatChanged($PDOdb)) ?></td>
 	            <td><?php echo $history->show_user() ?></td>
 	        </tr>
 	        <?php
