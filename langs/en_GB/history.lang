@@ -1,0 +1,43 @@
+# Dolibarr language file - en_GB - History Module - ATM Consulting
+
+Module104400Name = History
+Module104400Desc = This module allows you to track actions performed on Dolibarr. A view gives you the history of proposals, third parties, contacts, projects, products, events and tasks. The other actions are also archived but no display rendered.
+
+ATMAbout = This module has been developed by <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>You can find the documentation on our <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>For any question or feedback, contact us on <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>For any commercial question, contact us on <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> or at +33 9 77 19 50 70<br><br>Find our other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+HistorySetup = History Module Setup
+HistoryAbout = About History
+Restore=Restore
+WhatChanged=Changes
+COMPANY_MODIFY=Modify Company
+COMPANY_CREATE=Create Company
+CONTACT_MODIFY=Modify Contact
+CONTACT_CREATE=Create Contact
+ACTION_MODIFY=Modify Action
+ACTION_CREATE=Create Action
+CATEGORY_LINK=Link Category
+CATEGORY_UNLINK =Remove category
+SUPPLIER_PRODUCT_BUYPRICE_UPDATE=Supplier buying price updated
+PRODUCT_PRICE_MODIFY=Product price modified
+PRODUCT_MODIFY=Product modified
+PROJECT_TASK_ADD_CONTACT=Added contact to project task
+TASK_MODIFY=Modified task
+TASK_CREATE=Task created
+LINEPROPAL_INSERT=Inserted line in proposal
+PROPAL_CREATE=Proposal created
+HISTORY_STOCK_FULL_OBJECT_ON_DELETE=Stores the object for deletion for a restore
+LINEPROPAL_UPDATE=Updated line in proposal
+LINEPROPAL_DELETE=Deleted line in proposal
+COMPANY_DELETE=Deleted company
+PRODUCT_CREATE=Created product
+PRODUCT_SET_MULTILANGS=Updated translations
+COMPANY_LINK_SALE_REPRESENTATIVE=Link sales representative
+COMPANY_UNLINK_SALE_REPRESENTATIVE=Remove sales representative
+
+DeletedElement=Deleted Items
+WholeObjectDeleted=Deleted whole object
+
+CategLinked = Category linked
+CategUnlinked = Category removed
+
+HideletedElementstory=Product History
