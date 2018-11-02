@@ -23,13 +23,15 @@
 		dol_include_once('/core/lib/order.lib.php');
 	}
 	
+	$langs->load('history@history');
+	
 	if(GETPOST('restoreObject')>0) {
 
 		DeepHistory::restoreCopy(GETPOST('restoreObject'));
 		
     }
 	
-    llxHeader('',$langs->trans('HideletedElementstory'));
+    llxHeader('',$langs->trans('History'));
 
     $type_object = GETPOST('type_object');
     $fk_object = GETPOST('id');
