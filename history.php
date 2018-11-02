@@ -23,6 +23,12 @@
 		dol_include_once('/core/lib/order.lib.php');
 	}
 	
+	if(GETPOST('restoreObject')>0) {
+
+		DeepHistory::restoreCopy(GETPOST('restoreObject'));
+		
+    }
+	
     llxHeader('',$langs->trans('HideletedElementstory'));
 
     $type_object = GETPOST('type_object');
@@ -92,22 +98,16 @@
 
     $THistory = DeepHistory::getHistory($type_object, $fk_object)  ;
 
-    if(GETPOST('restoreObject')>0) {
-
-		DeepHistory::restoreCopy(GETPOST('restoreObject'));
-
-    }
-
 	?>
-    <table class="border" width="100%">
+    <table class="noborder" width="100%">
         <tr class="liste_titre">
-            <td class="liste_titre"><?php echo $langs->trans('Date') ?></td><?php
+            <th class="liste_titre"><?php echo $langs->trans('Date') ?></th><?php
             if($type_object == 'deletedElement') {
-            	echo '<td class="liste_titre">'.$langs->trans('Ref').'</td>';
+            	echo '<th class="liste_titre">'.$langs->trans('Ref').'</th>';
 			}
-            ?><td class="liste_titre"><?php echo $langs->trans('Action') ?></td>
-            <td class="liste_titre"><?php echo $langs->trans('WhatChanged') ?></td>
-            <td class="liste_titre"><?php echo $langs->trans('User') ?></td>
+            ?><th class="liste_titre"><?php echo $langs->trans('Action') ?></th>
+            <th class="liste_titre"><?php echo $langs->trans('WhatChanged') ?></th>
+            <th class="liste_titre"><?php echo $langs->trans('User') ?></th>
         </tr>
 
     <?php
@@ -121,7 +121,7 @@
 			            <td><?php echo $history->get_date('date_entry','dayhoursec'); ?></td>
 			            <td><?php echo $history->show_ref() ?></td>
 			            <td><?php echo $history->show_action() ?></td>
-			            <td><?php echo $history->show_whatChanged($PDOdb, false, true) ?></td>
+			            <td><?php echo $history->show_whatChanged(false, true) ?></td>
 			            <td><?php echo $history->show_user() ?></td>
 			        </tr>
 					<?php
@@ -132,12 +132,12 @@
 	        <tr class="<?php $class=($class=='impair')?'pair':'impair'; echo $class; ?>">
 	            <td><?php echo $history->get_date('date_entry','dayhoursec'); ?></td>
 	            <td><?php echo $history->show_action() ?></td>
-	            <td><?php echo $history->show_whatChanged($PDOdb) ?></td>
+	            <td><?php echo $history->show_whatChanged() ?></td>
 	            <td><?php echo $history->show_user() ?></td>
 	        </tr>
 	        <?php
 
-	        if(!empty($history->object) && GETPOST('showObject') == $history->getId()) {
+	        if(!empty($history->object) && GETPOST('showObject') == $history->id) {
 	        	unset($history->object->db);
 				echo '<tr><td colspan="4"><pre>'.print_r($history->object,true).'</pre></td></tr>';
 
