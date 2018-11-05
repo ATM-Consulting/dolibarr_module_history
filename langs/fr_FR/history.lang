@@ -30,3 +30,6 @@ PRODUCT_SET_MULTILANGS=Mise à jour des traductions
 
 DeletedElement=Elements supprimés
 WholeObjectDeleted=Objet complet supprimé
+
+DeletedObjectRestored=Objet restoré
+History=Historique

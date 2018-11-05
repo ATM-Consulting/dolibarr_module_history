@@ -30,7 +30,7 @@ class DeepHistory extends SeedObject {
         $this->key_value1 = 0;
 
 	}
-
+	
 	function show_ref() {
 		global $db,$user,$conf,$langs;
 
@@ -116,14 +116,17 @@ class DeepHistory extends SeedObject {
 		$r = nl2br(htmlentities($this->what_changed));
 
 		if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE)) {
-			if($show_details && !empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->getId().'">'.img_view().'</a>';
+			if($show_details && !empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->id.'">'.img_view().'</a>';
 
 			if($show_restore && !empty($user->rights->history->restore)) {
-				$res = $this->db->query("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_element.'_deletedhistory');
-				if($obj=$this->db->fetch_object($res)) {
-					$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->getId().'">'.img_picto('Restore', 'refresh').'</a>';
+				$resql = $this->db->query("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_object.'_deletedhistory');
+				if ($resql)
+				{
+					if($obj=$this->db->fetch_object($res)) {
+						$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->id.'">'.img_picto('Restore', 'refresh').'</a>';
+					}
 				}
-
+				else {} // la table n'existe pas, ça veut dire qu'il n'y pas encore eu de suppression d'objet
 			}
 
 		}
@@ -168,7 +171,7 @@ class DeepHistory extends SeedObject {
 			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
 	         WHERE type_action LIKE '%DELETE%'
 	         ORDER BY date_entry DESC";
-
+	         
 		}
 		else{
 			$sql="SELECT rowid FROM ".MAIN_DB_PREFIX."history
@@ -217,15 +220,16 @@ class DeepHistory extends SeedObject {
 			$backup_table = $table.'_deletedhistory';
 
 			$obj = new SeedObject($db);
-			$obj->table_object= $backup_table;
+			$obj->table_element= $backup_table;
 			$obj->init_vars_by_db();
 			$obj->fetch( $h->fk_object_deleted );
-
+			if (empty($obj->rowid)) $obj->rowid = $obj->id;
+			
 			$obj2 = clone $obj;
 
 			$db->query("set foreign_key_checks = 0");
 
-			$obj2->table_object= $table;
+			$obj2->table_element= $table;
 			$obj2->init_db_by_vars();
 			$obj2->date_creation = $obj2->tms = time();
 			
@@ -236,8 +240,10 @@ class DeepHistory extends SeedObject {
 
 	}
 	
-	private function replaceCommon(User $user, $notrigger = false)
+	public function replaceCommon(User $user, $notrigger = false)
 	{
+		if (is_callable('parent::replaceCommon')) return parent::replaceCommon($user, $notrigger);
+		
 		global $langs;
 		
 		$error = 0;
@@ -323,28 +329,30 @@ class DeepHistory extends SeedObject {
 	}
 	
 
-	static function makeCopy(&$object) {
-		global $db;
-		if(is_object($object) && !empty($object->table_element)){
-
-			$table = $h->table_object;
-			$backup_table = $table.'_deletedhistory';
-			
+	static function makeCopy(&$object)
+	{
+		global $db,$user;
+		
+		if(is_object($object) && !empty($object->table_element))
+		{
+			$db->query('set foreign_key_checks = 0');
+			$backup_table = $object->table_element.'_deletedhistory';
 			$obj = new SeedObject($db);
-			$obj->table_object= $table;
+			$obj->table_element= $object->table_element; // Target object table to fetch data
 			$obj->init_vars_by_db();
 			$obj->fetch( $object->id );
+			if (empty($obj->rowid)) $obj->rowid = $obj->id; // pour le replaceCommon
 			
 			$obj2 = clone $obj;
 			
 			$db->query("set foreign_key_checks = 0");
 			
-			$obj2->table_object= $backup_table;
-			$obj2->init_db_by_vars();
+			$obj2->table_element = $backup_table; // Target the backup table to insert
+			$obj2->init_db_by_vars(); // Update structure
 			$obj2->date_creation = $obj2->tms = time();
 			
 			$obj2->replaceCommon($user);
-
+			
 		}
 
 		foreach($object as $k=>$v) {
@@ -355,7 +363,7 @@ class DeepHistory extends SeedObject {
 
 		}
 
-
+	
 	}
-
+	
 }
