@@ -236,7 +236,7 @@ class DeepHistory extends SeedObject {
 
 	}
 	
-	private function replaceCommon(User $user, $notrigger = false)
+	public function replaceCommon(User $user, $notrigger = false)
 	{
 		global $langs;
 		
