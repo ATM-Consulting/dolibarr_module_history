@@ -1,3 +1,4 @@
+# langs fr_FR 
 Module104400Name = Historique
 Module104400Desc = Historise toutes les actions faites sur un objet
 
@@ -5,35 +6,40 @@ ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.
 
 HistorySetup = Configuration du module History
 HistoryAbout = A propos du module History
-Restore=Restaurer
-WhatChanged=Ce qui a été modifié
-COMPANY_MODIFY=Société modifiée
-COMPANY_CREATE=Société créée
-CONTACT_MODIFY=Contact modifé
-CONTACT_CREATE=Contact créé
-ACTION_MODIFY=Evènement modifié
-ACTION_CREATE=Evènement créé
-CATEGORY_LINK=Liaison de la catégorie
-CATEGORY_UNLINK =Détachement de la catégorie
-SUPPLIER_PRODUCT_BUYPRICE_UPDATE=Mise à jour du prix fournisseur
-PRODUCT_PRICE_MODIFY=Mise à jour du prix produit
-PRODUCT_MODIFY=Produit modifié
-PROJECT_TASK_ADD_CONTACT=Ajout d'un contact sur la tâche
-TASK_MODIFY=Modification de la tâche
-TASK_CREATE=Création de la tâche
-LINEPROPAL_INSERT=Insertion d'un ligne de proposition
-PROPAL_CREATE=Création de la propal
-HISTORY_STOCK_FULL_OBJECT_ON_DELETE=Stocke l'objet à la suppression pour une restauration
-LINEPROPAL_UPDATE=Mise à jour de la ligne de propale
-LINEPROPAL_DELETE=Suppression de la ligne de propale
-COMPANY_DELETE=Société supprimée
-PRODUCT_CREATE=Création du produit
-PRODUCT_SET_MULTILANGS=Mise à jour des traductions
-COMPANY_LINK_SALE_REPRESENTATIVE=Ajout d'un commercial
-COMPANY_UNLINK_SALE_REPRESENTATIVE=Détachement d'un commercial
 
-DeletedElement=Elements supprimés
-WholeObjectDeleted=Objet complet supprimé
+Restore = Restaurer
+WhatChanged = Ce qui a été modifié
 
+COMPANY_MODIFY = Société modifiée
+COMPANY_CREATE = Société créée
+CONTACT_MODIFY = Contact modifé
+CONTACT_CREATE = Contact créé
+ACTION_MODIFY = Evènement modifié
+ACTION_CREATE = Evènement créé
+PRODUCT_MODIFY = Produit modifié
+PRODUCT_CREATE = Création du produit
+TASK_MODIFY = Modification de la tâche
+TASK_CREATE = Création de la tâche
+
+CATEGORY_LINK = Liaison de la catégorie
+CATEGORY_UNLINK = Détachement de la catégorie
 CategLinked = Catégorie liée
 CategUnlinked = Catégorie détachée
+
+SUPPLIER_PRODUCT_BUYPRICE_UPDATE = Mise à jour du prix fournisseur
+PRODUCT_PRICE_MODIFY = Mise à jour du prix produit
+PRODUCT_SET_MULTILANGS = Mise à jour des traductions
+PROJECT_TASK_ADD_CONTACT = Ajout d'un contact sur la tâche
+PROPAL_CREATE = Création de la propal
+HISTORY_STOCK_FULL_OBJECT_ON_DELETE = Stocke l'objet à la suppression pour une restauration
+
+LINEPROPAL_INSERT = Insertion d'un ligne de proposition
+LINEPROPAL_UPDATE = Mise à jour de la ligne de propale
+LINEPROPAL_DELETE = Suppression de la ligne de propale
+
+COMPANY_DELETE = Société supprimée
+COMPANY_LINK_SALE_REPRESENTATIVE = Ajout d'un commercial
+COMPANY_UNLINK_SALE_REPRESENTATIVE = Détachement d'un commercial
+
+DeletedElement = Elements supprimés
+WholeObjectDeleted = Objet complet supprimé
