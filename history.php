@@ -31,7 +31,7 @@
 		
     }
 	
-    llxHeader('',$langs->trans('HideletedElementstory'));
+    llxHeader('',$langs->trans('ElementHistory'));
 
     $type_object = GETPOST('type_object');
     $fk_object = GETPOST('id');
