@@ -34,7 +34,11 @@ class DeepHistory extends SeedObject {
 	function show_ref() {
 		global $db,$user,$conf,$langs;
 
-		dol_include_once('/'.$this->type_object.'/class/'.$this->type_object.'.class.php');
+		if ($this->type_object == 'ecmfiles') {
+			dol_include_once('/ecm/class/'.$this->type_object.'.class.php');
+		} else {
+			dol_include_once('/'.$this->type_object.'/class/'.$this->type_object.'.class.php');
+		}
 
 		$class = ucfirst($this->type_object);
 
