@@ -136,7 +136,7 @@ class InterfaceHistorytrigger
 			
 			if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE) && strpos($action,'DELETE')!==false) {
 				$h->object = clone $object;
-				$h->table_element = $object->table_element;
+				$h->table_object = $object->table_element;
 				$h->fk_object_deleted = $object->id;
 			}
 
