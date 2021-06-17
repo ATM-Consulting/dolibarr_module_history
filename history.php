@@ -22,6 +22,11 @@
 		dol_include_once('/commande/class/commande.class.php');
 		dol_include_once('/core/lib/order.lib.php');
 	}
+
+	$type_object = GETPOST('type_object');
+    $fk_object = GETPOST('id', 'int');
+
+    $langs->load('history@history');
 	
 	$langs->load('history@history');
 	
@@ -31,7 +36,7 @@
 		
     }
 	
-    llxHeader('',$langs->trans('HideletedElementstory'));
+    llxHeader('',$langs->trans('ElementHistory'));
 
     $type_object = GETPOST('type_object');
     $fk_object = GETPOST('id');
@@ -39,39 +44,32 @@
 	if($type_object == 'deletedElement') {
 		dol_include_once('/history/lib/history.lib.php');
 		$head = historyAdminPrepareHead($object);
-        dol_fiche_head($head, 'delted',$langs->trans("ModuleName"),  0,  "history@history");
-
+		print dol_get_fiche_head($head, 'delted',$langs->trans("ModuleName"),  -1,  "history@history");
 	}
 	else if($type_object == 'propal') {
         $object = new Propal($db);
         $object->fetch($fk_object);
         $head = propal_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Proposal'), 0, 'propal');
+        print dol_get_fiche_head($head, 'history', $langs->trans('Proposal'), -1, 'propal');
     }
     else if($type_object=='societe') {
         $object = new Societe($db);
         $object->fetch($fk_object);
         $head = societe_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
-
+	    print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
     }
-
     else if($type_object=='action') {
         $object = new ActionComm($db);
         $object->fetch($fk_object);
         $head = actions_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
-
+	    print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
     }
-
     else if($type_object=='project') {
         $object = new Project($db);
         $object->fetch($fk_object);
         $head = project_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
-
+	    print dol_get_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
     }
-
     /*else if($type_object=='order') {
      //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
     	$object = new Commande($db);
@@ -80,7 +78,6 @@
     	dol_fiche_head($head, 'history', $langs->trans('CustomerOrder'), 0, 'action');
 
     }*/
-
     else if( class_exists(ucfirst($type_object)) ) {
         $class = ucfirst($type_object);
 
@@ -89,7 +86,7 @@
 
         if(function_exists($type_object.'_prepare_head')) {
             $head = call_user_func($type_object.'_prepare_head', $object, $user);
-            dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+            print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
         }
 
     }
@@ -107,15 +104,15 @@
     }
 
 	?>
-    <table class="noborder" width="100%">
+    <table class="noborder centpercent">
         <tr class="liste_titre">
-            <th class="liste_titre"><?php echo $langs->trans('Date') ?></th><?php
+            <td><?php echo $langs->trans('Date') ?></td><?php
             if($type_object == 'deletedElement') {
-            	echo '<th class="liste_titre">'.$langs->trans('Ref').'</th>';
+            	echo '<td>'.$langs->trans('Ref').'</td>';
 			}
-            ?><th class="liste_titre"><?php echo $langs->trans('Action') ?></th>
-            <th class="liste_titre"><?php echo $langs->trans('WhatChanged') ?></th>
-            <th class="liste_titre"><?php echo $langs->trans('User') ?></th>
+            ?><td><?php echo $langs->trans('Action') ?></td>
+            <td><?php echo $langs->trans('WhatChanged') ?></td>
+            <td><?php echo $langs->trans('User') ?></td>
         </tr>
 
     <?php
