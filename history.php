@@ -22,19 +22,19 @@
 		dol_include_once('/commande/class/commande.class.php');
 		dol_include_once('/core/lib/order.lib.php');
 	}
-	
-	$langs->load('history@history');
-	
-	if(GETPOST('restoreObject')>0) {
 
-		DeepHistory::restoreCopy(GETPOST('restoreObject'));
-		
+	$langs->load('history@history');
+
+	if(GETPOST('restoreObject','int')>0) {
+
+		DeepHistory::restoreCopy(GETPOST('restoreObject','int'));
+
     }
-	
+
     llxHeader('',$langs->trans('History'));
 
-    $type_object = GETPOST('type_object');
-    $fk_object = GETPOST('id');
+    $type_object = GETPOST('type_object','alpha');
+    $fk_object = GETPOST('id','int');
 
 	if($type_object == 'deletedElement') {
 		dol_include_once('/history/lib/history.lib.php');
@@ -139,7 +139,7 @@
 	        </tr>
 	        <?php
 
-	        if(!empty($history->object) && GETPOST('showObject') == $history->id) {
+	        if(!empty($history->object) && GETPOST('showObject','int') == $history->id) {
 	        	unset($history->object->db);
 				echo '<tr><td colspan="4"><pre>'.print_r($history->object,true).'</pre></td></tr>';
 
