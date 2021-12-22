@@ -22,54 +22,59 @@
 		dol_include_once('/commande/class/commande.class.php');
 		dol_include_once('/core/lib/order.lib.php');
 	}
-
-	$type_object = GETPOST('type_object');
+	
+	$type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id', 'int');
 
-    $langs->load('history@history');
-	
 	$langs->load('history@history');
 	
-	if(GETPOST('restoreObject')>0) {
+	if(GETPOST('restoreObject','int')>0) {
 
-		DeepHistory::restoreCopy(GETPOST('restoreObject'));
+		DeepHistory::restoreCopy(GETPOST('restoreObject','int'));
 		
     }
 	
-    llxHeader('',$langs->trans('ElementHistory'));
+    llxHeader('',$langs->trans('History'));
 
-    $type_object = GETPOST('type_object');
-    $fk_object = GETPOST('id');
+    $type_object = GETPOST('type_object','alpha');
+    $fk_object = GETPOST('id','int');
 
 	if($type_object == 'deletedElement') {
 		dol_include_once('/history/lib/history.lib.php');
 		$head = historyAdminPrepareHead($object);
-		print dol_get_fiche_head($head, 'delted',$langs->trans("ModuleName"),  -1,  "history@history");
+        dol_fiche_head($head, 'delted',$langs->trans("ModuleName"),  0,  "history@history");
+
 	}
 	else if($type_object == 'propal') {
         $object = new Propal($db);
         $object->fetch($fk_object);
         $head = propal_prepare_head($object);
-        print dol_get_fiche_head($head, 'history', $langs->trans('Proposal'), -1, 'propal');
+        dol_fiche_head($head, 'history', $langs->trans('Proposal'), 0, 'propal');
     }
     else if($type_object=='societe') {
         $object = new Societe($db);
         $object->fetch($fk_object);
         $head = societe_prepare_head($object);
-	    print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
+        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
+
     }
+
     else if($type_object=='action') {
         $object = new ActionComm($db);
         $object->fetch($fk_object);
         $head = actions_prepare_head($object);
-	    print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
+        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
+
     }
+
     else if($type_object=='project') {
         $object = new Project($db);
         $object->fetch($fk_object);
         $head = project_prepare_head($object);
-	    print dol_get_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
+        dol_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
+
     }
+
     /*else if($type_object=='order') {
      //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
     	$object = new Commande($db);
@@ -78,6 +83,7 @@
     	dol_fiche_head($head, 'history', $langs->trans('CustomerOrder'), 0, 'action');
 
     }*/
+
     else if( class_exists(ucfirst($type_object)) ) {
         $class = ucfirst($type_object);
 
@@ -86,7 +92,7 @@
 
         if(function_exists($type_object.'_prepare_head')) {
             $head = call_user_func($type_object.'_prepare_head', $object, $user);
-            print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+            dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
         }
 
     }
@@ -97,22 +103,22 @@
 
     $THistory = DeepHistory::getHistory($type_object, $fk_object)  ;
 
-    if(GETPOST('restoreObject')>0) {
+    if(GETPOST('restoreObject','int')>0) {
 
-		DeepHistory::restoreCopy(GETPOST('restoreObject'));
+		DeepHistory::restoreCopy(GETPOST('restoreObject','int'));
 
     }
 
 	?>
-    <table class="noborder centpercent">
+    <table class="noborder" width="100%">
         <tr class="liste_titre">
-            <td><?php echo $langs->trans('Date') ?></td><?php
+            <th class="liste_titre"><?php echo $langs->trans('Date') ?></th><?php
             if($type_object == 'deletedElement') {
-            	echo '<td>'.$langs->trans('Ref').'</td>';
+            	echo '<th class="liste_titre">'.$langs->trans('Ref').'</th>';
 			}
-            ?><td><?php echo $langs->trans('Action') ?></td>
-            <td><?php echo $langs->trans('WhatChanged') ?></td>
-            <td><?php echo $langs->trans('User') ?></td>
+            ?><th class="liste_titre"><?php echo $langs->trans('Action') ?></th>
+            <th class="liste_titre"><?php echo $langs->trans('WhatChanged') ?></th>
+            <th class="liste_titre"><?php echo $langs->trans('User') ?></th>
         </tr>
 
     <?php
@@ -142,7 +148,7 @@
 	        </tr>
 	        <?php
 
-	        if(!empty($history->object) && GETPOST('showObject') == $history->id) {
+	        if(!empty($history->object) && GETPOST('showObject','int') == $history->id) {
 	        	unset($history->object->db);
 				echo '<tr><td colspan="4"><pre>'.print_r($history->object,true).'</pre></td></tr>';
 
