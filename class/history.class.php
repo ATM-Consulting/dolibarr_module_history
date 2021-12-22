@@ -321,12 +321,14 @@ class DeepHistory extends SeedObject {
 		// Commit or rollback
 		if ($error) {
 			$this->db->rollback();
+			$this->db->close();
 			return -1;
 		} else {
 			$this->db->commit();
+			$this->db->close();
 			return $this->id;
 		}
-  		$this->db->close();
+
 	}
 
 
