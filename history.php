@@ -22,19 +22,19 @@
 		dol_include_once('/commande/class/commande.class.php');
 		dol_include_once('/core/lib/order.lib.php');
 	}
-	
+
 	$type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id', 'int');
 
 	$langs->load('history@history');
-	
+
 	if(GETPOST('restoreObject','int')>0) {
 
 		DeepHistory::restoreCopy(GETPOST('restoreObject','int'));
-		
+
     }
-	
-    llxHeader('',$langs->trans('History'));
+
+    llxHeader('',$langs->trans('ElementHistory'));
 
     $type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id','int');
