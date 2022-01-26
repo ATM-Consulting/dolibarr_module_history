@@ -37,8 +37,11 @@ if (! $user->admin) {
     accessforbidden();
 }
 
+
+
 // Parameters
 $action = GETPOST('action', 'alpha');
+$newToken = function_exists('newToken')?newToken():$_SESSION['newtoken'];
 
 /*
  * Actions
@@ -56,7 +59,7 @@ if (preg_match('/set_(.*)/',$action,$reg))
 		dol_print_error($db);
 	}
 }
-	
+
 if (preg_match('/del_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
@@ -109,7 +112,7 @@ print '<td>'.$langs->trans("HISTORY_STOCK_FULL_OBJECT_ON_DELETE").'</td>';
 print '<td align="center" width="20">&nbsp;</td>';
 print '<td align="right" width="300">';
 print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="token" value="'. $newToken .' "/>';
 print '<input type="hidden" name="action" value="set_HISTORY_STOCK_FULL_OBJECT_ON_DELETE">';
 print $form->selectyesno("HISTORY_STOCK_FULL_OBJECT_ON_DELETE",$conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE,1);
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
