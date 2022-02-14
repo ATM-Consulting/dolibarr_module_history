@@ -42,20 +42,20 @@
 	if($type_object == 'deletedElement') {
 		dol_include_once('/history/lib/history.lib.php');
 		$head = historyAdminPrepareHead($object);
-        dol_fiche_head($head, 'delted',$langs->trans("ModuleName"),  0,  "history@history");
+		print dol_get_fiche_head($head, 'delted',$langs->trans("ModuleName"), -1, "history@history");
 
 	}
 	else if($type_object == 'propal') {
         $object = new Propal($db);
         $object->fetch($fk_object);
         $head = propal_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Proposal'), 0, 'propal');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Proposal'), -1, 'propal');
     }
     else if($type_object=='societe') {
         $object = new Societe($db);
         $object->fetch($fk_object);
         $head = societe_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Proposal'), -1, 'propal');
 
     }
 
@@ -63,7 +63,7 @@
         $object = new ActionComm($db);
         $object->fetch($fk_object);
         $head = actions_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
 
     }
 
@@ -71,7 +71,7 @@
         $object = new Project($db);
         $object->fetch($fk_object);
         $head = project_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
 
     }
 
@@ -92,7 +92,7 @@
 
         if(function_exists($type_object.'_prepare_head')) {
             $head = call_user_func($type_object.'_prepare_head', $object, $user);
-            dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+			print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
         }
 
     }
