@@ -1,4 +1,4 @@
-# Dolibarr language file - en_US - History Module - ATM Consulting
+# Dolibarr language file - en_GB - History Module - ATM Consulting
 
 Module104400Name = History
 Module104400Desc = This module allows you to track actions performed on Dolibarr. A view gives you the history of proposals, third parties, contacts, projects, products, events and tasks. The other actions are also archived but no display rendered.

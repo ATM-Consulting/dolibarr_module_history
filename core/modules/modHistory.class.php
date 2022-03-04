@@ -44,6 +44,9 @@ class modHistory extends DolibarrModules
 
         $this->db = $db;
 
+		$this->editor_name = 'ATM-Consulting';
+		$this->editor_url = 'https://www.atm-consulting.fr';
+
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
 		$this->numero = 104400; // 104000 to 104999 for ATM CONSULTING
@@ -52,7 +55,7 @@ class modHistory extends DolibarrModules
 
 		// Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
 		// It is used to group modules in module setup page
-		$this->family = "other";
+		$this->family = "ATM";
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
@@ -164,8 +167,8 @@ class modHistory extends DolibarrModules
             ,'task:-info:NU:true'
 
             //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
- 			//,'order:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=order&id=__ID__'
-            //,'order:-info:NU:true'
+ 			,'order:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=commande&id=__ID__'
+            ,'order:-info:NU:true'
 
         );
 

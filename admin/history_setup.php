@@ -83,22 +83,22 @@ llxHeader('', $langs->trans($page_name));
 // Subheader
 $linkback = '<a href="' . DOL_URL_ROOT . '/admin/modules.php">'
     . $langs->trans("BackToModuleList") . '</a>';
-print_fiche_titre($langs->trans($page_name), $linkback);
+print load_fiche_titre($langs->trans($page_name), $linkback);
 
 // Configuration header
 $head = historyAdminPrepareHead();
-dol_fiche_head(
+print dol_get_fiche_head(
     $head,
     'settings',
     $langs->trans("ModuleName"),
-    0,
+    -1,
     "history@history"
 );
 
 // Setup page goes here
 $form=new Form($db);
 $var=false;
-print '<table class="noborder" width="100%">';
+print '<table class="noborder centpercent">';
 print '<tr class="liste_titre">';
 print '<td>'.$langs->trans("Parameters").'</td>'."\n";
 print '<td align="center" width="20">&nbsp;</td>';

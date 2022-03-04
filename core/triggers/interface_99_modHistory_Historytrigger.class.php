@@ -33,10 +33,10 @@
 /**
  * Trigger class
  */
-class InterfaceHistorytrigger
+class InterfaceHistorytrigger extends DolibarrTriggers
 {
 
-    private $db;
+    protected $db;
 
     /**
      * Constructor
@@ -111,7 +111,7 @@ class InterfaceHistorytrigger
      * 	@param		conf		$conf		Object conf
      * 	@return		int						<0 if KO, 0 if no triggered ran, >0 if OK
      */
-    public function run_trigger($action, $object, $user, $langs, $conf)
+    public function runTrigger($action, $object, $user, $langs, $conf)
     {
         // Put here code you want to execute when a Dolibarr business events occurs.
         // Data and type of action are stored into $object and $action
@@ -121,7 +121,6 @@ class InterfaceHistorytrigger
        if(is_null($db)) {
            $db = &$this->db;
        }
-       
        if(!empty($object->element)) {
            
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
@@ -153,15 +152,44 @@ class InterfaceHistorytrigger
                 $h->what_changed = 'cf. action';
            
             }
+			if($action == 'CATEGORY_LINK' || $action == 'CATEGORY_UNLINK'){
+				$langs->load('history@history');
+				$objsrc = $object;
+				
+				if($action == 'CATEGORY_LINK')$object = $object->linkto;
+				if($action == 'CATEGORY_UNLINK')$object = $object->unlinkoff;
+				
+				$h->fk_object = $object->id;
+				
+				$objsrc->fetch($objsrc->id);
+				$type_object= $object->element;
+				
+				if($action == 'CATEGORY_LINK')$h->what_changed = $langs->transnoentitiesnoconv('CategLinked')." ==> $objsrc->label";
+				if($action == 'CATEGORY_UNLINK')$h->what_changed = $langs->transnoentitiesnoconv('CategUnlinked')." ==> $objsrc->label";
+				
+			}
+			if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE' || $action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE'){
+				$langs->load('history@history');
 			
+				$h->fk_object = $object->id;
+				$type_object= $object->element;
+				$usrtarget = new User($db);
+				$usrtarget->fetch($object->context['commercial_modified']);
+				$label = $usrtarget->lastname.' '.$usrtarget->firstname;
+				if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_LINK_SALE_REPRESENTATIVE')." ==> $label";
+				if($action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_UNLINK_SALE_REPRESENTATIVE')." ==> $label";
+				
+			}
 			$h->setRef($object);
 			
             $h->type_action = $action;
             $h->fk_user = $user->id;
             $h->type_object = $type_object;
-			$res = $h->create($user);
+			
+			if(!empty($h->what_changed))$res = $h->create($user);
+			
 			if($res<=0) {
-				var_dump($h);exit;
+				//var_dump($h);exit;
 			}
 			
                

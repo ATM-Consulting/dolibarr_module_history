@@ -23,6 +23,11 @@
 		dol_include_once('/core/lib/order.lib.php');
 	}
 
+
+	$type_object = GETPOST('type_object','alpha');
+    $fk_object = GETPOST('id', 'int');
+
+
 	$langs->load('history@history');
 
 	if(GETPOST('restoreObject','int')>0) {
@@ -31,7 +36,10 @@
 
     }
 
-    llxHeader('',$langs->trans('History'));
+
+
+    llxHeader('',$langs->trans('ElementHistory'));
+
 
     $type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id','int');
@@ -39,20 +47,20 @@
 	if($type_object == 'deletedElement') {
 		dol_include_once('/history/lib/history.lib.php');
 		$head = historyAdminPrepareHead($object);
-        dol_fiche_head($head, 'delted',$langs->trans("ModuleName"),  0,  "history@history");
+		print dol_get_fiche_head($head, 'delted',$langs->trans("ModuleName"), -1, "history@history");
 
 	}
 	else if($type_object == 'propal') {
         $object = new Propal($db);
         $object->fetch($fk_object);
         $head = propal_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Proposal'), 0, 'propal');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Proposal'), -1, 'propal');
     }
     else if($type_object=='societe') {
         $object = new Societe($db);
         $object->fetch($fk_object);
         $head = societe_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
 
     }
 
@@ -60,7 +68,7 @@
         $object = new ActionComm($db);
         $object->fetch($fk_object);
         $head = actions_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'action');
 
     }
 
@@ -68,7 +76,7 @@
         $object = new Project($db);
         $object->fetch($fk_object);
         $head = project_prepare_head($object);
-        dol_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Project'), 0, 'action');
 
     }
 
@@ -89,7 +97,7 @@
 
         if(function_exists($type_object.'_prepare_head')) {
             $head = call_user_func($type_object.'_prepare_head', $object, $user);
-            dol_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+			print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
         }
 
     }
@@ -99,6 +107,12 @@
     }
 
     $THistory = DeepHistory::getHistory($type_object, $fk_object)  ;
+
+    if(GETPOST('restoreObject','int')>0) {
+
+		DeepHistory::restoreCopy(GETPOST('restoreObject','int'));
+
+    }
 
 	?>
     <table class="noborder" width="100%">
