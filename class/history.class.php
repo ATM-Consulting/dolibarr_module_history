@@ -13,7 +13,7 @@ class DeepHistory extends SeedObject {
     	
     	$this->fields=array(
         		'fk_object'=>array('type'=>'integer','index'=>true)
-        		,'fk_object_deleted'=>array('type'=>'integer','index'=>true)
+        		,'fk_object_deleted'=>array('type'=>'integer','index'=>true, 'notnull'=>1, 'default'=>0)
         		,'key_value1'=>array('type'=>'float','index'=>true)
         		,'fk_user'=>array('type'=>'integer')
         		,'type_object'=>array('type'=>'string','length'=>50,'index'=>true)
