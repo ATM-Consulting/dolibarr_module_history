@@ -23,8 +23,10 @@
 		dol_include_once('/core/lib/order.lib.php');
 	}
 
+
 	$type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id', 'int');
+
 
 	$langs->load('history@history');
 
@@ -34,7 +36,10 @@
 
     }
 
+
+
     llxHeader('',$langs->trans('ElementHistory'));
+
 
     $type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id','int');
