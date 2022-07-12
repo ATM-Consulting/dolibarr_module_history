@@ -25,7 +25,7 @@
 
 function historyAdminPrepareHead()
 {
-    global $langs, $conf;
+    global $langs, $conf, $object;
 
     $langs->load("history@history");
 

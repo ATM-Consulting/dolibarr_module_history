@@ -46,7 +46,7 @@
 
 	if($type_object == 'deletedElement') {
 		dol_include_once('/history/lib/history.lib.php');
-		$head = historyAdminPrepareHead($object);
+		$head = historyAdminPrepareHead();
 		print dol_get_fiche_head($head, 'delted',$langs->trans("ModuleName"), -1, "history@history");
 
 	}
