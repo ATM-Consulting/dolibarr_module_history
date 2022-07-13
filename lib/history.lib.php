@@ -36,13 +36,13 @@ function historyAdminPrepareHead()
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'settings';
     $h++;
-	
+
 	$head[$h][0] = dol_buildpath("/history/history.php?type_object=deletedElement", 1);
     $head[$h][1] = $langs->trans("DeletedElement");
     $head[$h][2] = 'delted';
     $h++;
-	
-	
+
+
     $head[$h][0] = dol_buildpath("/history/admin/history_about.php", 1);
     $head[$h][1] = $langs->trans("About");
     $head[$h][2] = 'about';
@@ -56,7 +56,7 @@ function historyAdminPrepareHead()
     //$this->tabs = array(
     //	'entity:-tabname:Title:@history:/history/mypage.php?id=__ID__'
     //); // to remove a tab
-    complete_head_from_modules($conf, $langs, $object, $head, $h, 'history');
+    complete_head_from_modules($conf, $langs, null, $head, $h, 'history');
 
     return $head;
 }
