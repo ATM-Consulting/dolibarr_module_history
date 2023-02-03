@@ -1,0 +1,43 @@
+# Dolibarr language file - de_DE - History Module - ATM Consulting
+
+Module104400Name = Historie
+Module104400Desc = Dieses Modul ermöglicht es Ihnen, die in Dolibarr durchgeführten Aktionen zu verfolgen. Eine Ansicht zeigt Ihnen die Historie von Angeboten, Geschäftspartnern, Kontakten, Projekten, Produkten, Veranstaltungen und Aufgaben. Die anderen Aktionen werden ebenfalls archiviert, aber nicht angezeigt.
+
+ATMAbout = This module has been developed by <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>You can find the documentation on our <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>For any question or feedback, contact us on <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>For any commercial question, contact us on <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> or at +33 9 77 19 50 70<br><br>Find our other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+HistorySetup=Historie Modul Einstellungen
+HistoryAbout=Über Historie
+Restore=Wiederherstellen
+WhatChanged=Änderungen
+COMPANY_MODIFY=Geschäftspartner geändert
+COMPANY_CREATE=Geschäftspartner erstellt
+CONTACT_MODIFY=Kontakt geändert
+CONTACT_CREATE=Kontakt erstellt
+ACTION_MODIFY=Aktion geändert
+ACTION_CREATE=Aktion erstellt
+CATEGORY_LINK=Kategorie verlinkt
+CATEGORY_UNLINK=Kategorie entkoppelt
+SUPPLIER_PRODUCT_BUYPRICE_UPDATE=Einkaufspreis des Lieferanten aktualisiert
+PRODUCT_PRICE_MODIFY=Produktpreis geändert
+PRODUCT_MODIFY=Produkt geändert
+PROJECT_TASK_ADD_CONTACT=Kontakt zu Projekt Aufgabe hinzugefügt
+TASK_MODIFY=Aufgabe geändert
+TASK_CREATE=Aufgabe erstellt
+LINEPROPAL_INSERT=Zeile in Angebot hinzugefügt
+PROPAL_CREATE=Angebot erstellt
+HISTORY_STOCK_FULL_OBJECT_ON_DELETE=Speichert das Object zur Löschung für eine Wiederherstellung
+LINEPROPAL_UPDATE=Zeile in Angebot geändert
+LINEPROPAL_DELETE=Zeile in Angebot entfernt
+COMPANY_DELETE=Geschäftspartner entfernt
+PRODUCT_CREATE=Produkt erstellt
+PRODUCT_SET_MULTILANGS=Übersetzungen im Produkt geändert
+COMPANY_LINK_SALE_REPRESENTATIVE=Vertriebsmitarbeiter verlinkt
+COMPANY_UNLINK_SALE_REPRESENTATIVE=Vertriebsmitarbeiter entkoppelt
+
+DeletedElement=Gelöschte Objekte
+WholeObjectDeleted=Lösche ganzes Objekt
+
+CategLinked = Kategorie verlinkt
+CategUnlinked = Kategorie entfernt
+
+ElementHistory=Historie
