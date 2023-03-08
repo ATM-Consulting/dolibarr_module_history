@@ -113,7 +113,7 @@ class DeepHistory extends SeedObject {
     function show_whatChanged($show_details = true, $show_restore = true) {
 	global $conf,$user;
 
-		$r = nl2br(htmlentities($this->what_changed));
+		$r = nl2br($this->what_changed);
 
 		if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE)) {
 			if($show_details && !empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->id.'">'.img_view().'</a>';
