@@ -26,6 +26,7 @@
 /**
  * Class ActionsHistory
  */
+require_once __DIR__.'/../backport/v19/core/class/commonhookactions.class.php';
 class ActionsHistory extends \history\RetroCompatCommonHookActions
 {
 	/**
