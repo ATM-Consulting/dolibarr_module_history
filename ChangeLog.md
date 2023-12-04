@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-
+- NEW :  COMPATV19  - *04/12/2023* - 2.1.0  
+    Changed Dolibarr compatibility range to 12 min - 19 max  
+    Changed PHP compatibility range to 7.0 min - 8.2 max
 ## 2.0
 FIX : Remove htmlEntities - *08/03/2023* - 2.0.6  
 FIX : Missing icon *13/07/2022* - 2.0.5
