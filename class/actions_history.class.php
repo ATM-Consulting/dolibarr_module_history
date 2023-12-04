@@ -69,7 +69,7 @@ class ActionsHistory
 			
 			$history_old_object = clone $object;
 		  
-		  	if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE) && strpos($action,'delete')!==false) {
+		  	if(getDolGlobalString('HISTORY_STOCK_FULL_OBJECT_ON_DELETE') && strpos($action,'delete')!==false) {
 		  		
 				if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
             	dol_include_once('/history/config.php');

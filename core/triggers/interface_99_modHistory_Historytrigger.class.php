@@ -134,7 +134,7 @@ class InterfaceHistorytrigger extends DolibarrTriggers
                 if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
             }
 			
-			if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE) && strpos($action,'DELETE')!==false) {
+			if(getDolGlobalString('HISTORY_STOCK_FULL_OBJECT_ON_DELETE') && strpos($action,'DELETE')!==false) {
 				$h->object = clone $object;
 				$h->table_object = $object->table_element;
 				$h->fk_object_deleted = $object->id;
