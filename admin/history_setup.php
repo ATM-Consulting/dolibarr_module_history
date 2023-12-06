@@ -114,7 +114,7 @@ print '<td align="right" width="300">';
 print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
 print '<input type="hidden" name="token" value="'. $newToken .' "/>';
 print '<input type="hidden" name="action" value="set_HISTORY_STOCK_FULL_OBJECT_ON_DELETE">';
-print $form->selectyesno("HISTORY_STOCK_FULL_OBJECT_ON_DELETE",$conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE,1);
+print $form->selectyesno("HISTORY_STOCK_FULL_OBJECT_ON_DELETE", getDolGlobalInt('HISTORY_STOCK_FULL_OBJECT_ON_DELETE'),1);
 print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
 print '</form>';
 print '</td></tr>';
