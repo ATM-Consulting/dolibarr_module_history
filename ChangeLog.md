@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
     Changed PHP compatibility range to 7.0 min - 8.2 max
 
 ## 2.0
+
+FIX : Fatal missing inclusion - *06/11/2023* - 2.0.7  
 FIX : Remove htmlEntities - *08/03/2023* - 2.0.6  
 FIX : Missing icon *13/07/2022* - 2.0.5
 Fix : change object field type to string  " *27/05/2022* - 2.0.4
