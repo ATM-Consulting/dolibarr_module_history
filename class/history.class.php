@@ -1,5 +1,7 @@
 <?php
 
+dol_include_once('abricot/includes/class/class.seedobject.php');
+
 class DeepHistory extends SeedObject {
 /*
  * Gestion des équipements

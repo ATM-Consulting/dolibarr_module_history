@@ -14,10 +14,10 @@
 		global $dolibarr_main_db_host, $dolibarr_main_db_name, $dolibarr_main_db_user, $dolibarr_main_db_pass;
 	}
 	
-	if(!dol_include_once('/abricot/inc.core.php')) {
+	if(!dol_include_once('abricot/inc.core.php')) {
 		print $langs->trans('AbricotNotFound'). ' : <a href="http://wiki.atm-consulting.fr/index.php/Accueil#Abricot" target="_blank">Abricot</a>';
 		exit;
 	}
 
-	dol_include_once('/history/class/history.class.php');
+	dol_include_once('history/class/history.class.php');
 

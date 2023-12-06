@@ -30,6 +30,7 @@
  * 				- The name property name must be Mytrigger
  */
 
+require_once __DIR__ .'/../../class/history.class.php';  
 /**
  * Trigger class
  */
@@ -118,6 +119,7 @@ class InterfaceHistorytrigger
         // Users
 		
        $db = &$object->db;
+
        if(is_null($db)) {
            $db = &$this->db;
        }
@@ -125,7 +127,7 @@ class InterfaceHistorytrigger
        if(!empty($object->element)) {
            
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
-            if(!dol_include_once('/history/config.php')) return 0;
+            if(!dol_include_once('history/config.php')) return 0;
             
             $h=new DeepHistory($db);
             
