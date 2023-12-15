@@ -62,7 +62,7 @@ class modHistory extends DolibarrModules
 		$this->description = "Description of module History";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '2.0.7';
+		$this->version = '2.1.0';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -145,29 +145,29 @@ class modHistory extends DolibarrModules
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
         $this->tabs = array(
-            'propal:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=propal&id=__ID__'
+            'propal:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=propal&id=__ID__'
             ,'propal:-info:NU:true'
 
-            ,'thirdparty:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=societe&id=__ID__'
+            ,'thirdparty:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=societe&id=__ID__'
             ,'thirdparty:-info:NU:true'
 
-            ,'contact:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=contact&id=__ID__'
+            ,'contact:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=contact&id=__ID__'
             ,'contact:-info:NU:true'
 
-            ,'action:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=action&id=__ID__'
+            ,'action:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=action&id=__ID__'
             ,'action:-info:NU:true'
 
-            ,'product:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=product&id=__ID__'
+            ,'product:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=product&id=__ID__'
             ,'product:-info:NU:true'
 
-            ,'project:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=project&id=__ID__'
+            ,'project:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=project&id=__ID__'
             ,'project:-info:NU:true'
 
-            ,'task:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=task&id=__ID__'
+            ,'task:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=task&id=__ID__'
             ,'task:-info:NU:true'
 
             //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
- 			,'order:+history:History:history@history:$user->rights->history->read:/history/history.php?type_object=commande&id=__ID__'
+ 			,'order:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=commande&id=__ID__'
             ,'order:-info:NU:true'
 
         );
