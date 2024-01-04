@@ -28,8 +28,8 @@ if (file_exists(DOL_DOCUMENT_ROOT. '/core/class/commonhookactions.class.php')){
 	/**
 	 *	Parent class of all other hook actions classes
 	 */
-	require_once DOL_DOCUMENT_ROOT.'/core/class/commonhookactions.class.php';
-	abstract class  RetroCompatCommonHookActions extends CommonHookActions{
+	require_once DOL_DOCUMENT_ROOT. '/core/class/commonhookactions.class.php';
+	abstract class  RetroCompatCommonHookActions extends \CommonHookActions {
 
 	}
 
