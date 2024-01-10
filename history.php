@@ -45,6 +45,13 @@
     $fk_object = GETPOST('id','int');
 
 	if($type_object == 'deletedElement') {
+
+
+		// Subheader
+		$linkback = '<a href="' . DOL_URL_ROOT . '/admin/modules.php">'
+			. $langs->trans("BackToModuleList") . '</a>';
+		print load_fiche_titre($langs->trans('DeletedElements'), $linkback, 'tools');
+
 		dol_include_once('/history/lib/history.lib.php');
 		$head = historyAdminPrepareHead();
 		print dol_get_fiche_head($head, 'delted',$langs->trans("ModuleName"), -1, "history@history");

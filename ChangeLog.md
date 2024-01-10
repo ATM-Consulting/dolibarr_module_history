@@ -3,11 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
- - NEW :  COMPATV19  - *04/12/2023* - 2.1.0  
+
+
+## Release 2.2
+
+- NEW TechATM + Page About - *10/01/2024* - 2.2.0
+- NEW : COMPATV19 - *04/12/2023* - 2.1.0  
     Changed Dolibarr compatibility range to 15 min - 19 max  
     Changed PHP compatibility range to 7.0 min - 8.2 max
 
-## 2.0
+## Release 2.0
 
 FIX : Fatal missing inclusion - *06/11/2023* - 2.0.7  
 FIX : Remove htmlEntities - *08/03/2023* - 2.0.6  

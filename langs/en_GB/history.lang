@@ -41,3 +41,7 @@ CategLinked = Category linked
 CategUnlinked = Category removed
 
 ElementHistory=Element History
+DeletedObjectRestored = Restored object
+History = History
+HISTORY_STOCK_FULL_OBJECT_ON_DELETEhelp = Experimental option
+DeletedElements = Delete items
