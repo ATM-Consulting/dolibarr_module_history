@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ## Release 2.2
 
+- FIX : Warning on change user right  - *10/01/2024* - 2.2.1
 - NEW TechATM + Page About - *10/01/2024* - 2.2.0
 - NEW : COMPATV19 - *04/12/2023* - 2.1.0  
     Changed Dolibarr compatibility range to 15 min - 19 max  
