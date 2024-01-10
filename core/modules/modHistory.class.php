@@ -62,7 +62,7 @@ class modHistory extends DolibarrModules
 		$this->description = "Description of module History";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '2.1.0';
+		$this->version = '2.2.0';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -112,6 +112,11 @@ class modHistory extends DolibarrModules
 		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
 		$this->need_dolibarr_version = array(15,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("history@history");
+
+
+		// Url to the file with your last numberversion of this module
+		require_once __DIR__ . '/../../class/techatm.class.php';
+		$this->url_last_version = \history\TechATM::getLastModuleVersionUrl($this);
 
 		// Constants
 		// List of particular constants to add when module is enabled (key, 'chaine', value, desc, visible, 'current' or 'allentities', deleteonunactive)
