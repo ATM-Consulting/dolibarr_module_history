@@ -121,10 +121,10 @@ class DeepHistory extends SeedObject {
 
 		$r = nl2br($this->what_changed);
 
-		if(!empty($conf->global->HISTORY_STOCK_FULL_OBJECT_ON_DELETE)) {
+		if(getDolGlobalString('HISTORY_STOCK_FULL_OBJECT_ON_DELETE')) {
 			if($show_details && !empty($this->object)) $r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&showObject='.$this->id.'">'.img_view().'</a>';
 
-			if($show_restore && !empty($user->rights->history->restore)) {
+			if($show_restore && $user->hasRight('history', 'restore')) {
 				$resql = $this->db->query("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_object.'_deletedhistory');
 				if ($resql)
 				{
