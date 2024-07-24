@@ -62,7 +62,7 @@ class modHistory extends DolibarrModules
 		$this->description = "Description of module History";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '2.2.1';
+		$this->version = '2.3.0';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -110,7 +110,7 @@ class modHistory extends DolibarrModules
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
 		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(15,0);	// Minimum version of Dolibarr required by module
+		$this->need_dolibarr_version = array(16,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("history@history");
 
 
@@ -178,7 +178,7 @@ class modHistory extends DolibarrModules
         );
 
         // Dictionaries
-	    if (! isset($conf->history->enabled))
+		if (isModEnabled('history'))
         {
         	$conf->history=new stdClass();
         	$conf->history->enabled=0;
