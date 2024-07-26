@@ -178,7 +178,7 @@ class modHistory extends DolibarrModules
         );
 
         // Dictionaries
-		if (isModEnabled('history'))
+		if (! isModEnabled('history'))
         {
         	$conf->history=new stdClass();
         	$conf->history->enabled=0;
