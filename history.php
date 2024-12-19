@@ -17,16 +17,11 @@
    	dol_include_once('/fourn/class/fournisseur.commande.class.php');
     dol_include_once('/fourn/class/fournisseur.facture.class.php');
 	dol_include_once('/fourn/class/fournisseur.product.class.php');
-
-	if(DOL_VERSION>5) {
-		dol_include_once('/commande/class/commande.class.php');
-		dol_include_once('/core/lib/order.lib.php');
-	}
-
+	dol_include_once('/commande/class/commande.class.php');
+	dol_include_once('/core/lib/order.lib.php');
 
 	$type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id', 'int');
-
 
 	$langs->load('history@history');
 
@@ -35,7 +30,6 @@
 		DeepHistory::restoreCopy(GETPOST('restoreObject','int'));
 
     }
-
 
 
     llxHeader('',$langs->trans('ElementHistory'));
