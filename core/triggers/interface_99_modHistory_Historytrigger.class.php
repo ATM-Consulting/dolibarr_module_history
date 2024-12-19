@@ -30,7 +30,7 @@
  * 				- The name property name must be Mytrigger
  */
 
-require_once __DIR__ .'/../../class/history.class.php';  
+require_once __DIR__ .'/../../class/history.class.php';
 /**
  * Trigger class
  */
@@ -117,110 +117,122 @@ class InterfaceHistorytrigger extends DolibarrTriggers
         // Put here code you want to execute when a Dolibarr business events occurs.
         // Data and type of action are stored into $object and $action
         // Users
-		
+
        $db = &$object->db;
 
        if(is_null($db)) {
            $db = &$this->db;
        }
        if(!empty($object->element)) {
-           
+
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
             if(!dol_include_once('history/config.php')) return 0;
-            
-            $h=new DeepHistory($db);
-            
+
+            $deepHistory=new DeepHistory($db);
+
             $type_object = $object->element;
             if(substr($type_object,-3) == 'det'){
                 $type_object = substr($type_object,0,-3);
-                if(!empty($object->{'fk_'.$type_object})) $h->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
+                if(!empty($object->{'fk_'.$type_object})) $deepHistory->fk_object = $object->{'fk_'.$type_object}; // TODO ça marche pas, pas rempli quand update line :/
             }
-			
 
 
-	        if(empty($h->fk_object)) $h->fk_object = $object->id;
+
+	        if(empty($deepHistory->fk_object)) $deepHistory->fk_object = $object->id;
 
 			global $history_old_object;
 
-    	    if(!empty($object->oldline)) $h->compare($object, $object->oldline);
-            else if(!empty($object->oldcopy)) $h->compare($object, $object->oldcopy);
-			else if(!empty($history_old_object) && get_class( $history_old_object ) == get_class( $object) ) $h->compare($object, $history_old_object);
+    	    if(!empty($object->oldline)) $deepHistory->compare($object, $object->oldline);
+            else if(!empty($object->oldcopy)) $deepHistory->compare($object, $object->oldcopy);
+			else if(!empty($history_old_object) && get_class( $history_old_object ) == get_class( $object) ) $deepHistory->compare($object, $history_old_object);
             else {
-                
-                $h->what_changed = 'cf. action';
-           
+
+				$deepHistory->what_changed = 'cf. action';
+
             }
 
 			if(getDolGlobalString('HISTORY_STOCK_FULL_OBJECT_ON_DELETE') && strpos($action,'DELETE')!==false) {
 				//TODO Faire en sorte que ça marche, cette feature n'a jamais été dev complement il y a pas mal de choses à faire pour que ça fonctionne
-				$h->table_object = $object->table_element;
-				$h->fk_object_deleted = $object->id;
-				if(empty($h->what_changed)) $h->what_changed = 'cf. action';
+				$deepHistory->table_object = $object->table_element;
+				$deepHistory->fk_object_deleted = $object->id;
+				if(empty($deepHistory->what_changed)) $deepHistory->what_changed = 'cf. action';
 			}
 
-			if($action == 'CATEGORY_LINK' || $action == 'CATEGORY_UNLINK'){
+			if($action == 'CATEGORY_LINK' || $action == 'CATEGORY_UNLINK' || $action == 'CATEGORY_MODIFY'){
 				$langs->load('history@history');
-				$objsrc = $object;
-				
-				if($action == 'CATEGORY_LINK')$object = $object->linkto;
-				if($action == 'CATEGORY_UNLINK')$object = $object->unlinkoff;
-				
-				$h->fk_object = $object->id;
-				
-				$objsrc->fetch($objsrc->id);
-				$type_object= $object->element;
-				
-				if($action == 'CATEGORY_LINK')$h->what_changed = $langs->transnoentitiesnoconv('CategLinked')." ==> $objsrc->label";
-				if($action == 'CATEGORY_UNLINK')$h->what_changed = $langs->transnoentitiesnoconv('CategUnlinked')." ==> $objsrc->label";
-				
+
+				if($action == 'CATEGORY_LINK') {
+					$objectToLink = $object->linkto;
+				} elseif ($action == 'CATEGORY_MODIFY' && is_object($object->context['linkto'])) {
+					$objectToLink = $object->context['linkto'];
+				}
+				if($action == 'CATEGORY_UNLINK' ) {
+					$objectToLink = $object->unlinkoff;
+				} elseif ($action == 'CATEGORY_MODIFY' && is_object($object->context['unlinkoff'])) {
+					$objectToLink = $object->context['unlinkoff'];
+				}
+
+				$deepHistory->fk_object = $objectToLink->id;
+
+				$object->fetch($object->id);
+				$type_object = $objectToLink->element;
+
+				if($action == 'CATEGORY_LINK' || $action == 'CATEGORY_MODIFY' && is_object($object->context['linkto'])){
+					$deepHistory->what_changed = $langs->transnoentitiesnoconv('CategLinked')." ==> $object->label";
+				}
+				if($action == 'CATEGORY_UNLINK' || $action == 'CATEGORY_MODIFY' && is_object($object->context['unlinkoff'])){
+					$deepHistory->what_changed = $langs->transnoentitiesnoconv('CategUnlinked')." ==> $object->label";
+				}
+
 			}
 			if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE' || $action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE'){
 				$langs->load('history@history');
-			
-				$h->fk_object = $object->id;
+
+				$deepHistory->fk_object = $object->id;
 				$type_object= $object->element;
 				$usrtarget = new User($db);
 				$usrtarget->fetch($object->context['commercial_modified']);
 				$label = $usrtarget->lastname.' '.$usrtarget->firstname;
-				if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_LINK_SALE_REPRESENTATIVE')." ==> $label";
-				if($action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE')$h->what_changed = $langs->transnoentitiesnoconv('COMPANY_UNLINK_SALE_REPRESENTATIVE')." ==> $label";
-				
-			}
-			$h->setRef($object);
-			
-            $h->type_action = $action;
-            $h->fk_user = $user->id;
-            $h->type_object = $type_object;
-			if(!empty($h->what_changed))$res = $h->create($user);
+				if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE')$deepHistory->what_changed = $langs->transnoentitiesnoconv('COMPANY_LINK_SALE_REPRESENTATIVE')." ==> $label";
+				if($action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE')$deepHistory->what_changed = $langs->transnoentitiesnoconv('COMPANY_UNLINK_SALE_REPRESENTATIVE')." ==> $label";
 
-			
-               
+			}
+			$deepHistory->setRef($object);
+
+            $deepHistory->type_action = $action;
+            $deepHistory->fk_user = $user->id;
+            $deepHistory->type_object = $type_object;
+			if(!empty($deepHistory->what_changed)) {
+				$res = $deepHistory->create($user);
+			}
+
+
        }else{
        	switch ($action){
 			case 'STOCK_MOVEMENT':
-				
+
 	            if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
 	            dol_include_once('/history/config.php');
-	            
-	            $h=new DeepHistory($db);
+
+	            $deepHistory=new DeepHistory($db);
 	            $produit = new Product($db);
 				$produit->fetch($object->product_id);
-			
-				$h->setRef($produit);
-				
-	            $h->type_action = $action;
-	            $h->fk_user = $user->id;
-	            $h->type_object = 'product';
-            	$h->fk_object = $produit->id;
-				$h->what_changed = 'pmp => '.$produit->pmp."\n".'qty_movement => '.$object->qty;
-				$h->key_value1 = $produit->pmp;
-				
-				$h->create($user);
-				
+
+				$deepHistory->setRef($produit);
+
+	            $deepHistory->type_action = $action;
+	            $deepHistory->fk_user = $user->id;
+	            $deepHistory->type_object = 'product';
+            	$deepHistory->fk_object = $produit->id;
+				$deepHistory->what_changed = 'pmp => '.$produit->pmp."\n".'qty_movement => '.$object->qty;
+				$deepHistory->key_value1 = $produit->pmp;
+
+				$deepHistory->create($user);
+
 				break;
        	}
        }
-       
+
         return 0;
     }
 }
