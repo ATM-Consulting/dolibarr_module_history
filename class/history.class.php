@@ -102,7 +102,7 @@ class DeepHistory extends SeedObject {
 	                if(property_exists($oldO, $k) // vérifie que l'attribut exist
 	                	&& !is_object($oldO->{$k})
 						&& !is_array($oldO->{$k})
-	                	&& $oldO->{$k} !== $v
+	                	&& $oldO->{$k} != $v
 	                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
 						)
 	            	{
