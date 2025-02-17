@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Release 2.3
-- FIX : missed contact class in file history.php - *17/02/2025* - 2.3.2  
+- FIX : missed contact class in file history.php - *17/02/2025* - 2.3.3  
+- FIX : Le test sur le type des anciennes valeurs vs les nouvelles était mauvais ce qui empêchait un bon enregistrement des données.- **31/01/2025** - 2.3.2
 - FIX : COMPAT V21 - *18/12/2024* - 2.3.1
 - NEW : COMPAT V20 - *24/07/2024* - 2.3.0
 
