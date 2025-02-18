@@ -18,6 +18,7 @@
     dol_include_once('/fourn/class/fournisseur.facture.class.php');
 	dol_include_once('/fourn/class/fournisseur.product.class.php');
 	dol_include_once('/commande/class/commande.class.php');
+	dol_include_once('/contact/class/contact.class.php');
 	dol_include_once('/core/lib/order.lib.php');
 
 	$type_object = GETPOST('type_object','alpha');
