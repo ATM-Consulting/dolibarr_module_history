@@ -79,11 +79,13 @@ class DeepHistory extends SeedObject {
 
     private function cmp(&$newO, &$oldO, $checkArrayOptions = false)
     {
+		global $langs;
+
         if(empty($newO) || empty($oldO)) return '';
 
         $diff = '';
 
-        foreach($newO as $k=>$v)
+        foreach($newO as $k => $v)
         {
             if(!is_array($v) && !is_object($v))
             {
@@ -93,7 +95,7 @@ class DeepHistory extends SeedObject {
 					if($oldO[$k] !== $v && (!empty($v) || (!empty($oldO[$k]) &&  $oldO[$k] !== '0.000') ) )
 	            	{
 	            		// substr remove options_
-	                    $diff.=substr($k, 8).' : '.$oldO[$k].' => '.$v."\n";
+	                    $diff.=$langs->trans(substr($k, 8)).' : '.$oldO[$k].' => '.$v."\n";
 	                }
 				}
 				else
@@ -106,7 +108,21 @@ class DeepHistory extends SeedObject {
 	                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
 						)
 	            	{
-	                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+						if ($oldO->fields[$k]) {
+								$propName = $oldO->fields[$k]['label'];
+
+								if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
+									// Formatage du timestamp au format JJ/MM/AAAA
+									$newFormattedDate = date('d/m/Y', $oldO->{$k});
+									$oldFormattedDate = date('d/m/Y', $v);
+
+									$diff .= $langs->trans($propName) . ' : ' . $newFormattedDate . ' => ' . $oldFormattedDate . "\n";
+								} else {
+									$diff .= $langs->trans($propName) . ' : ' . $oldO->{$k} . ' => ' . $v . "\n";
+								}
+						}
+
+
 	                }
 				}
 
