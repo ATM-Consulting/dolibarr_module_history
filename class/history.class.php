@@ -74,10 +74,9 @@ class DeepHistory extends SeedObject {
     function compare(&$newO, &$oldO) {
     	$this->what_changed = '';
         $this->what_changed .= $this->cmp($newO, $oldO);
-    	$this->what_changed .= $this->cmp($newO, $oldO, true);
     }
 
-    private function cmp(&$newO, &$oldO, $checkArrayOptions = false) {
+    private function cmp(&$newO, &$oldO) {
 		global $langs, $db;
 
         if( empty($newO) || empty($oldO) ) return '';
@@ -89,7 +88,7 @@ class DeepHistory extends SeedObject {
 		$extrafields->fetch_name_optionals_label($newO->table_element);
 
         foreach($newO as $k => $v) {
-			if ($checkArrayOptions && $k == "array_options") {
+			if ($k == "array_options") {
 				foreach($v as $k2 => $v2) {
 					if ($oldO->array_options[$k2] != $v2) {
 						$name = substr($k2,8);
@@ -106,7 +105,7 @@ class DeepHistory extends SeedObject {
 					&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
 				) {
 
-					if ($oldO->fields[$k]) {
+					if (isset($oldO->fields[$k]) && $oldO->fields[$k]) {
 							$propName = $oldO->fields[$k]['label'];
 
 							if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
