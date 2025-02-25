@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Release 2.3
+- FIX : Cast en int des dates jamais définis par défaut en string  - *25/02/2025* - 2.3.6
 - FIX : Test des clés des fields  - *21/02/2025* - 2.3.5
         Suppression de $checkArrayOptions, plus nécéssaire dans la nouvelle gestion => provoquer des doublons dans l'onglet 
 - FIX : Conversion des tms en date - *20/02/2025* - 2.3.4
