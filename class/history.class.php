@@ -110,8 +110,9 @@ class DeepHistory extends SeedObject {
 
 							if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
 								// Formatage du timestamp au format JJ/MM/AAAA
-								$newFormattedDate = date('d/m/Y', $oldO->{$k});
-								$oldFormattedDate = date('d/m/Y', $v);
+
+								$newFormattedDate = date('d/m/Y', (int)$oldO->{$k});
+								$oldFormattedDate = date('d/m/Y', (int)$v);
 
 								$diff .= $langs->trans($propName) . ' : ' . $newFormattedDate . ' => ' . $oldFormattedDate . "\n";
 							} else {
