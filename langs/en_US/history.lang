@@ -45,3 +45,4 @@ DeletedObjectRestored = Restored object
 History = History
 HISTORY_STOCK_FULL_OBJECT_ON_DELETEhelp = Experimental option
 DeletedElements = Delete items
+NOTHING_FOUND = No previous action found.
