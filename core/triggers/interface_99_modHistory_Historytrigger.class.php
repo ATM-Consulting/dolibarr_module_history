@@ -118,6 +118,8 @@ class InterfaceHistorytrigger extends DolibarrTriggers
         // Data and type of action are stored into $object and $action
         // Users
 
+		$langs->load("history@history");
+
        $db = &$object->db;
 
        if(is_null($db)) {
@@ -137,7 +139,6 @@ class InterfaceHistorytrigger extends DolibarrTriggers
             }
 
 
-
 	        if( empty($deepHistory->fk_object) ) $deepHistory->fk_object = $object->id;
 
 			global $history_old_object;
@@ -147,7 +148,7 @@ class InterfaceHistorytrigger extends DolibarrTriggers
 			else if( !empty($history_old_object) && get_class( $history_old_object ) == get_class( $object) ) $deepHistory->compare($object, $history_old_object);
             else {
 
-				$deepHistory->what_changed = 'cf. action';
+				$deepHistory->what_changed = $langs->trans("NOTHING_FOUND");
 
             }
 
@@ -155,7 +156,7 @@ class InterfaceHistorytrigger extends DolibarrTriggers
 				//TODO Faire en sorte que ça marche, cette feature n'a jamais été dev complement il y a pas mal de choses à faire pour que ça fonctionne
 				$deepHistory->table_object = $object->table_element;
 				$deepHistory->fk_object_deleted = $object->id;
-				if(empty($deepHistory->what_changed)) $deepHistory->what_changed = 'cf. action';
+				if(empty($deepHistory->what_changed)) $deepHistory->what_changed = $langs->trans("NOTHING_FOUNDS");
 			}
 
 			if($action == 'CATEGORY_LINK' || $action == 'CATEGORY_UNLINK' || $action == 'CATEGORY_MODIFY'){

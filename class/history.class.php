@@ -84,15 +84,23 @@ class DeepHistory extends SeedObject {
         $diff = '';
 
 		// ici on a le code de l'attibut et non la clé de trad il faut la récupérer
-		$extrafields = new  ExtraFields($db);
+		$extrafields = new ExtraFields($db);
 		$extrafields->fetch_name_optionals_label($newO->table_element);
-
         foreach($newO as $k => $v) {
 			if ($k == "array_options") {
 				foreach($v as $k2 => $v2) {
-					if ($oldO->array_options[$k2] != $v2) {
-						$name = substr($k2,8);
-						$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$name]) . ' : ' . $oldO->array_options[$k2] . ' => ' . $v2 . "\n";
+					$label = substr($k2, 8);
+					if ($extrafields->attributes[$newO->element]["type"][$label] == 'datetime' || $extrafields->attributes[$newO->element]["type"][$label] == 'date') {
+						// Formatage du timestamp au format JJ/MM/AAAA
+
+						$oldFormattedDate = (int)$oldO->array_options[$k2] ? date('d/m/Y', (int)$oldO->array_options[$k2]) : "";
+						$newFormattedDate =	(int)$v2 ? date('d/m/Y', (int)$v2) : "";
+
+						if ($oldFormattedDate != $newFormattedDate) {
+							$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$label]) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
+						}
+					} elseif ($oldO->array_options[$k2] != $v2) {
+						$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$label]) . ' : ' . $oldO->array_options[$k2] . ' => ' . $v2 . "\n";
 					}
 				}
 			}
@@ -110,11 +118,12 @@ class DeepHistory extends SeedObject {
 
 							if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
 								// Formatage du timestamp au format JJ/MM/AAAA
+								$oldFormattedDate = (int)$oldO->{$k} ? date('d/m/Y', (int)$oldO->{$k}) : "";
+								$newFormattedDate = (int)$v ? date('d/m/Y', (int)$v) : "";
 
-								$newFormattedDate = date('d/m/Y', (int)$oldO->{$k});
-								$oldFormattedDate = date('d/m/Y', (int)$v);
-
-								$diff .= $langs->trans($propName) . ' : ' . $newFormattedDate . ' => ' . $oldFormattedDate . "\n";
+								if ($oldFormattedDate != $newFormattedDate) {
+									$diff .= $langs->trans($propName) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
+								}
 							} else {
 								$diff .= $langs->trans($propName) . ' : ' . $oldO->{$k} . ' => ' . $v . "\n";
 							}
