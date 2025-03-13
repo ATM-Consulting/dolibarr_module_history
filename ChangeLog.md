@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Release 2.3
-- FIX : suppression de la date 01/01/1970 si aucune date renseigné - 12/03/2025 - 2.3.8
 - FIX : Conversion des tms en date pour les extrafields - *06/03/2025* - 2.3.7
     + Remplacement de la mention cf.action par "Aucune action précédente trouvée", pour plus de compréhension.
+    + suppression de la date 01/01/1970 si aucune date renseigné
 - FIX : Cast en int des dates jamais définis par défaut en string  - *25/02/2025* - 2.3.6
 - FIX : Test des clés des fields  - *21/02/2025* - 2.3.5
         Suppression de $checkArrayOptions, plus nécéssaire dans la nouvelle gestion => provoquer des doublons dans l'onglet 
