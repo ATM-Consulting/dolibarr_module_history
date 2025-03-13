@@ -118,6 +118,8 @@ class InterfaceHistorytrigger extends DolibarrTriggers
         // Data and type of action are stored into $object and $action
         // Users
 
+		$langs->load("history@history");
+
        $db = &$object->db;
 
        if(is_null($db)) {
@@ -135,7 +137,6 @@ class InterfaceHistorytrigger extends DolibarrTriggers
                 $type_object = substr( $type_object,0,-3 );
                 if( !empty( $object->{ 'fk_'.$type_object } )) $deepHistory->fk_object = $object->{ 'fk_'.$type_object }; // TODO ça marche pas, pas rempli quand update line :/
             }
-
 
 
 	        if( empty($deepHistory->fk_object) ) $deepHistory->fk_object = $object->id;
