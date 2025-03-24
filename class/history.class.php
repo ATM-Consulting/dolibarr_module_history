@@ -1,6 +1,7 @@
 <?php
 
 dol_include_once('abricot/includes/class/class.seedobject.php');
+require_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
 
 class DeepHistory extends SeedObject {
 /*
@@ -70,44 +71,63 @@ class DeepHistory extends SeedObject {
 		else if(!empty($object->ref)) $this->ref = $object->ref;
 
 	}
-    function compare(&$newO, &$oldO)
-    {
+    function compare(&$newO, &$oldO) {
     	$this->what_changed = '';
         $this->what_changed .= $this->cmp($newO, $oldO);
-    	$this->what_changed .= $this->cmp($newO->array_options, $oldO->array_options, true);
     }
 
-    private function cmp(&$newO, &$oldO, $checkArrayOptions = false)
-    {
-        if(empty($newO) || empty($oldO)) return '';
+    private function cmp(&$newO, &$oldO) {
+		global $langs, $db;
+
+        if( empty($newO) || empty($oldO) ) return '';
 
         $diff = '';
 
-        foreach($newO as $k=>$v)
-        {
-            if(!is_array($v) && !is_object($v))
-            {
+		// ici on a le code de l'attibut et non la clé de trad il faut la récupérer
+		$extrafields = new ExtraFields($db);
+		$extrafields->fetch_name_optionals_label($newO->table_element);
+        foreach($newO as $k => $v) {
+			if ($k == "array_options") {
+				foreach($v as $k2 => $v2) {
+					$label = substr($k2, 8);
+					if ($extrafields->attributes[$newO->element]["type"][$label] == 'datetime' || $extrafields->attributes[$newO->element]["type"][$label] == 'date') {
+						// Formatage du timestamp au format JJ/MM/AAAA
 
-				if ($checkArrayOptions)
-				{
-					if($oldO[$k] !== $v && (!empty($v) || (!empty($oldO[$k]) &&  $oldO[$k] !== '0.000') ) )
-	            	{
-	            		// substr remove options_
-	                    $diff.=substr($k, 8).' : '.$oldO[$k].' => '.$v."\n";
-	                }
+						$oldFormattedDate = (int)$oldO->array_options[$k2] ? date('d/m/Y', (int)$oldO->array_options[$k2]) : "";
+						$newFormattedDate =	(int)$v2 ? date('d/m/Y', (int)$v2) : "";
+
+						if ($oldFormattedDate != $newFormattedDate) {
+							$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$label]) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
+						}
+					} elseif ($oldO->array_options[$k2] != $v2) {
+						$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$label]) . ' : ' . $oldO->array_options[$k2] . ' => ' . $v2 . "\n";
+					}
 				}
-				else
-				{
-					//isset($oldO->{$k}) => renvoi false sur $oldO->zip car défini à null
-	                if(property_exists($oldO, $k) // vérifie que l'attribut exist
-	                	&& !is_object($oldO->{$k})
-						&& !is_array($oldO->{$k})
-	                	&& $oldO->{$k} !== $v
-	                	&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
-						)
-	            	{
-	                    $diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
-	                }
+			}
+
+            if(!is_array($v) && !is_object($v)) {
+				if ( property_exists($oldO, $k) // vérifie que l'attribut exist
+					&& !is_object($oldO->{$k})
+					&& !is_array($oldO->{$k})
+					&& $oldO->{$k} != $v
+					&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
+				) {
+
+					if (isset($oldO->fields[$k]) && $oldO->fields[$k]) {
+							$propName = $oldO->fields[$k]['label'];
+
+							if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
+								// Formatage du timestamp au format JJ/MM/AAAA
+								$oldFormattedDate = (int)$oldO->{$k} ? date('d/m/Y', (int)$oldO->{$k}) : "";
+								$newFormattedDate = (int)$v ? date('d/m/Y', (int)$v) : "";
+
+								if ($oldFormattedDate != $newFormattedDate) {
+									$diff .= $langs->trans($propName) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
+								}
+							} else {
+								$diff .= $langs->trans($propName) . ' : ' . $oldO->{$k} . ' => ' . $v . "\n";
+							}
+					}
 				}
 
             }
