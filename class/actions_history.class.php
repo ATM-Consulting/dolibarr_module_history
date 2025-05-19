@@ -69,7 +69,9 @@ class ActionsHistory extends \history\RetroCompatCommonHookActions
 			global $history_old_object,$conf;
 
 			$history_old_object = clone $object;
-
+			
+			if($action == 'addline' && property_exists($object, "class_element_line")) $history_old_object = new $object->class_element_line($this->db);
+			
 		  	if(getDolGlobalString('HISTORY_STOCK_FULL_OBJECT_ON_DELETE') && strpos($action,'delete')!==false) {
 
 				if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
