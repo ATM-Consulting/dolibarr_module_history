@@ -95,7 +95,9 @@ class DeepHistory extends SeedObject {
 						|| $extrafields->attributes[$newO->table_element]["type"][$label] == 'date') {
 						// Formatage du timestamp au format JJ/MM/AAAA
 
-						$oldFormattedDate = (int)$oldO->array_options[$k2] ? date('d/m/Y', (int)$oldO->array_options[$k2]) : "";
+						$oldFormattedDate = isset($oldO->array_options[$k2]) && (int)$oldO->array_options[$k2]
+							? date('d/m/Y', (int)$oldO->array_options[$k2])
+							: "";
 						$newFormattedDate =	(int)$v2 ? date('d/m/Y', (int)$v2) : "";
 
 						if ($oldFormattedDate != $newFormattedDate) {
