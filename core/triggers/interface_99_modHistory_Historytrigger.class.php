@@ -167,9 +167,9 @@ class InterfaceHistorytrigger extends DolibarrTriggers
 				} elseif ($action == 'CATEGORY_MODIFY' && is_object($object->context['linkto'])) {
 					$objectToLink = $object->context['linkto'];
 				}
-				if($action == 'CATEGORY_UNLINK' ) {
+				if ($action == 'CATEGORY_UNLINK') {
 					$objectToLink = $object->unlinkoff;
-				} elseif ($action == 'CATEGORY_MODIFY' && is_object($object->context['unlinkoff'])) {
+				} elseif ($action == 'CATEGORY_MODIFY' && isset($object->context['unlinkoff']) && is_object($object->context['unlinkoff'])) {
 					$objectToLink = $object->context['unlinkoff'];
 				}
 
@@ -181,10 +181,9 @@ class InterfaceHistorytrigger extends DolibarrTriggers
 				if($action == 'CATEGORY_LINK' || $action == 'CATEGORY_MODIFY' && is_object($object->context['linkto'])){
 					$deepHistory->what_changed = $langs->transnoentitiesnoconv('CategLinked')." ==> $object->label";
 				}
-				if($action == 'CATEGORY_UNLINK' || $action == 'CATEGORY_MODIFY' && is_object($object->context['unlinkoff'])){
+				if($action == 'CATEGORY_UNLINK' || $action == 'CATEGORY_MODIFY' && isset($object->context['unlinkoff']) && is_object($object->context['unlinkoff'])){
 					$deepHistory->what_changed = $langs->transnoentitiesnoconv('CategUnlinked')." ==> $object->label";
 				}
-
 			}
 			if($action == 'COMPANY_LINK_SALE_REPRESENTATIVE' || $action == 'COMPANY_UNLINK_SALE_REPRESENTATIVE'){
 				$langs->load('history@history');
