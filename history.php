@@ -62,7 +62,7 @@
         $object = new Societe($db);
         $object->fetch($fk_object);
         $head = societe_prepare_head($object);
-		print dol_get_fiche_head($head, 'history', $langs->trans('Company'), 0, 'company');
+		print dol_get_fiche_head($head, 'history', $langs->trans('Company'), -1, 'company');
 
     }
 

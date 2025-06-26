@@ -90,16 +90,20 @@ class DeepHistory extends SeedObject {
 			if ($k == "array_options") {
 				foreach($v as $k2 => $v2) {
 					$label = substr($k2, 8);
-					if ($extrafields->attributes[$newO->element]["type"][$label] == 'datetime' || $extrafields->attributes[$newO->element]["type"][$label] == 'date') {
+					if (array_key_exists($newO->table_element, $extrafields->attributes)
+						&& $extrafields->attributes[$newO->table_element]["type"][$label] == 'datetime'
+						|| $extrafields->attributes[$newO->table_element]["type"][$label] == 'date') {
 						// Formatage du timestamp au format JJ/MM/AAAA
 
-						$oldFormattedDate = (int)$oldO->array_options[$k2] ? date('d/m/Y', (int)$oldO->array_options[$k2]) : "";
+						$oldFormattedDate = isset($oldO->array_options[$k2]) && (int)$oldO->array_options[$k2]
+							? date('d/m/Y', (int)$oldO->array_options[$k2])
+							: "";
 						$newFormattedDate =	(int)$v2 ? date('d/m/Y', (int)$v2) : "";
 
 						if ($oldFormattedDate != $newFormattedDate) {
 							$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$label]) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
 						}
-					} elseif ($oldO->array_options[$k2] != $v2) {
+					} elseif (array_key_exists($k2, $oldO->array_options) && $oldO->array_options[$k2] != $v2) {
 						$diff .= $langs->trans($extrafields->attributes[$newO->element]["label"][$label]) . ' : ' . $oldO->array_options[$k2] . ' => ' . $v2 . "\n";
 					}
 				}
