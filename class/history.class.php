@@ -90,11 +90,15 @@ class DeepHistory extends SeedObject {
 			if ($k == "array_options") {
 				foreach($v as $k2 => $v2) {
 					$label = substr($k2, 8);
-					if (array_key_exists($newO->table_element, $extrafields->attributes)
-						&& $extrafields->attributes[$newO->table_element]["type"][$label] == 'datetime'
-						|| $extrafields->attributes[$newO->table_element]["type"][$label] == 'date') {
+					// Check if the extrafield exists and is of type 'datetime' or 'date'
+					if (
+						!empty($newO->table_element) &&
+						array_key_exists($newO->table_element, $extrafields->attributes) &&
+						is_array($extrafields->attributes[$newO->table_element]['type']) &&
+						array_key_exists($label, $extrafields->attributes[$newO->table_element]['type']) &&
+						in_array($extrafields->attributes[$newO->table_element]['type'][$label], ['datetime', 'date'])
+					) {
 						// Formatage du timestamp au format JJ/MM/AAAA
-
 						$oldFormattedDate = isset($oldO->array_options[$k2]) && (int)$oldO->array_options[$k2]
 							? date('d/m/Y', (int)$oldO->array_options[$k2])
 							: "";
