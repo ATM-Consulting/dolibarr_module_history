@@ -30,7 +30,7 @@ require_once __DIR__.'/../backport/v19/core/class/commonhookactions.class.php';
 class ActionsHistory extends \history\RetroCompatCommonHookActions
 {
 	/**
-	 * @var array Hook results. Propagated to $hookmanager->resArray for later reuse
+	 * @var array Hook results. Propagated to $this->results for later reuse
 	 */
 	public $results = array();
 
