@@ -21,7 +21,11 @@
 	dol_include_once('/contact/class/contact.class.php');
 	dol_include_once('/core/lib/order.lib.php');
 
-	$type_object = GETPOST('type_object','alpha');
+    global $hookmanager;
+
+    $hookmanager->initHooks(array('history'));
+
+    $type_object = GETPOST('type_object','alpha');
     $fk_object = GETPOST('id', 'int');
 
 	$langs->load('history@history');
@@ -90,21 +94,32 @@
     	dol_fiche_head($head, 'history', $langs->trans('CustomerOrder'), 0, 'action');
 
     }*/
+    else {
 
-    else if( class_exists(ucfirst($type_object)) ) {
-        $class = ucfirst($type_object);
+        $parameters = ['type_object' => $type_object, 'fk_object' => $fk_object];
+        $reshook = $hookmanager->executeHooks('printHistoryHeadByTypeObject', $parameters); // Note that $action and $object may have been modified by some hooks
+        if($reshook) print $hookmanager->resPrint;
 
-        $object=new $class($db);
-        $object->fetch($fk_object);
+        else {
+            if( class_exists(ucfirst($type_object)) ) {
+                global $db, $user;
 
-        if(function_exists($type_object.'_prepare_head')) {
-            $head = call_user_func($type_object.'_prepare_head', $object, $user);
-			print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+                $class = ucfirst($type_object);
+                if($class == 'Finsimulation') $class = 'FinSimulation';
+
+                $object = new $class($db);
+                $object->fetch($fk_object);
+
+                if(function_exists($type_object.'_prepare_head')) {
+                    $head = call_user_func($type_object.'_prepare_head', $object, $user);
+                    print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+                }
+
+            }
+            else{
+                exit('Erreur, ce type d\'objet '.ucfirst($type_object).' n\'est pas traité par le module');
+            }
         }
-
-    }
-    else{
-        exit('Erreur, ce type d\'objet '.ucfirst($type_object).' n\'est pas traité par le module');
 
     }
 
