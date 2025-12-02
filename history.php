@@ -105,8 +105,6 @@
                 global $db, $user;
 
                 $class = ucfirst($type_object);
-                if($class == 'Finsimulation') $class = 'FinSimulation';
-
                 $object = new $class($db);
                 $object->fetch($fk_object);
 

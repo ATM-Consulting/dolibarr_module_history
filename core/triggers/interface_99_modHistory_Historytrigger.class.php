@@ -202,6 +202,7 @@ class InterfaceHistorytrigger extends DolibarrTriggers
             $deepHistory->type_action = $action;
             $deepHistory->fk_user = $user->id;
             $deepHistory->type_object = $type_object;
+
 			if(!empty($deepHistory->what_changed)) {
 				$res = $deepHistory->create($user);
 			}
