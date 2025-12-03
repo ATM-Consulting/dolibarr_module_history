@@ -97,7 +97,7 @@
     else {
 
         $parameters = ['type_object' => &$type_object, 'fk_object' => &$fk_object];
-        $reshook = $hookmanager->executeHooks('printHistoryHeadByTypeObject', $parameters); // Note that $action and $object may have been modified by some hooks
+        $reshook = $hookmanager->executeHooks('printHistoryHeadByTypeObject', $parameters);
         if($reshook) print $hookmanager->resPrint;
 
         else {
