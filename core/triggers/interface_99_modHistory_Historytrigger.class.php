@@ -130,9 +130,13 @@ class InterfaceHistorytrigger extends DolibarrTriggers
             if(!defined('INC_FROM_DOLIBARR')) define('INC_FROM_DOLIBARR',true);
             if(!dol_include_once('history/config.php')) return 0;
 
-            $deepHistory = new DeepHistory($db);
+			$type_object = $object->element;
 
-            $type_object = $object->element;
+			$noObjects = explode(',', getDolGlobalString('HISTORY_NO_OBJECT_LIST'));
+			if(in_array($type_object, $noObjects)) return 0;
+
+			$deepHistory = new DeepHistory($db);
+
             if(substr($type_object,-3) == 'det'){
                 $type_object = substr( $type_object,0,-3 );
                 if( !empty( $object->{ 'fk_'.$type_object } )) $deepHistory->fk_object = $object->{ 'fk_'.$type_object }; // TODO ça marche pas, pas rempli quand update line :/
@@ -202,6 +206,7 @@ class InterfaceHistorytrigger extends DolibarrTriggers
             $deepHistory->type_action = $action;
             $deepHistory->fk_user = $user->id;
             $deepHistory->type_object = $type_object;
+
 			if(!empty($deepHistory->what_changed)) {
 				$res = $deepHistory->create($user);
 			}

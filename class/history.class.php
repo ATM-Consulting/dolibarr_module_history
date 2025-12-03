@@ -74,7 +74,7 @@ class DeepHistory extends SeedObject {
     function compare(&$newO, &$oldO) {
     	$this->what_changed = '';
         $this->what_changed .= $this->cmp($newO, $oldO);
-    }
+	}
 
     private function cmp(&$newO, &$oldO) {
 		global $langs, $db;
@@ -135,6 +135,10 @@ class DeepHistory extends SeedObject {
 							} else {
 								$diff .= $langs->trans($propName) . ' : ' . $oldO->{$k} . ' => ' . $v . "\n";
 							}
+					} else {
+
+						$diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+
 					}
 				}
 

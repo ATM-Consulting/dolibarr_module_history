@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## Release 2.4
+- NEW : add possibility to historize object of extern module / seed object - *03/12/2025* - 2.4.0
+
 ## Release 2.3
 - FIX : Compat V22 - *02/10/2025* - 2.3.10
 - FIX : Warnings in some context if options_ is not défined in extrafields - *08/07/2025* - 2.3.9
