@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Release 2.3
+- FIX : DA027410 Fatal Error on BOM create line : add global db to function doActions *09/12/2025* - 2.3.11
 - FIX : Compat V22 - *02/10/2025* - 2.3.10
 - FIX : Warnings in some context if options_ is not défined in extrafields - *08/07/2025* - 2.3.9
 - FIX : Details on object line insert - *24/03/2025* - 2.3.8
