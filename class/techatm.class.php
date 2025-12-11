@@ -1,12 +1,13 @@
 <?php
-
 /**
  * Class TechATM
  * Class utilisée pour des mises à jours technique du module
  */
 
 namespace history;
-
+/**
+ * Class TechATM
+ */
 class TechATM
 {
 
@@ -58,17 +59,22 @@ class TechATM
 	/**
 	 *  Constructor
 	 *
-	 *  @param DoliDB $db
+	 * @param \DoliDB $db Database handler
 	 */
-	function __construct($db)
+	public function __construct($db)
 	{
 		$this->db = $db;
 	}
 
 	/**
-	 * @param DolibarrModules $moduleDescriptor
+	 * Get about page content
+	 *
+	 * @param  object  $moduleDescriptor Module descriptor
+	 * @param  boolean $useCache         Use cache
+	 * @return string                    Content
 	 */
-	function getAboutPage($moduleDescriptor, $useCache = true){
+	public function getAboutPage($moduleDescriptor, $useCache = true)
+	{
 		global $langs;
 
 		$url = self::ATM_TECH_URL.'/modules/modules-page-about.php';
@@ -82,11 +88,11 @@ class TechATM
 		$cacheFileName = dol_sanitizeFileName($moduleDescriptor->name.'_'.$langs->defaultlang).'.html';
 		$cacheFilePath = $cachePath.'/'.$cacheFileName;
 
-		if($useCache && is_readable($cacheFilePath)){
+		if ($useCache && is_readable($cacheFilePath)) {
 			$lastChange = filemtime($cacheFilePath);
-			if($lastChange > time() - 86400){
+			if ($lastChange > time() - 86400) {
 				$content = @file_get_contents($cacheFilePath);
-				if($content !== false){
+				if ($content !== false) {
 					return $content;
 				}
 			}
@@ -94,7 +100,7 @@ class TechATM
 
 		$content = $this->getContents($url);
 
-		if(!$content){
+		if (!$content) {
 			$content = '';
 			// About page goes here
 			$content.= '<div style="float: left;"><img src="../img/Dolibarr_Preferred_Partner_logo.png" /></div>';
@@ -104,14 +110,14 @@ class TechATM
 			$content.= '</center>';
 		}
 
-		if($useCache){
-			if(!is_dir($cachePath)){
+		if ($useCache) {
+			if (!is_dir($cachePath)) {
 				$res = dol_mkdir($cachePath, DOL_DATA_ROOT);
-			}else{
+			} else {
 				$res = true;
 			}
 
-			if($res){
+			if ($res) {
 				$comment = '<!-- Generated from '.$url.' -->'."\r\n";
 
 				file_put_contents(
@@ -125,18 +131,26 @@ class TechATM
 	}
 
 	/**
-	 * @param string $moduleTechMane
+	 * Get module doc URL
+	 *
+	 * @param  string $moduleTechMane Module technical name
+	 * @return string                 URL
 	 */
-	public static function getModuleDocUrl($moduleTechMane){
+	public static function getModuleDocUrl($moduleTechMane)
+	{
 		$url = self::ATM_TECH_URL.'/modules/doc-redirect.php';
 		$url.= '?module='.$moduleTechMane;
 		return $url;
 	}
 
 	/**
-	 * @param DolibarrModules $moduleDescriptor
+	 * Get last module version URL
+	 *
+	 * @param  object $moduleDescriptor Module descriptor
+	 * @return string                   URL
 	 */
-	public static function getLastModuleVersionUrl($moduleDescriptor){
+	public static function getLastModuleVersionUrl($moduleDescriptor)
+	{
 		$url = self::ATM_TECH_URL.'/modules/modules-last-version.php';
 		$url.= '?module='.$moduleDescriptor->name;
 		$url.= '&number='.$moduleDescriptor->numero;
@@ -148,17 +162,20 @@ class TechATM
 
 
 	/**
-	 * @param $url
-	 * @return false|object
+	 * Get JSON data from URL
+	 *
+	 * @param   string  $url    URL to reach
+	 * @return  mixed           Data content
 	 */
-	public function getJsonData($url){
+	public function getJsonData($url)
+	{
 		$this->data = false;
 		$res = @file_get_contents($url);
 		$this->http_response_header = $http_response_header;
 		$this->TResponseHeader = self::parseHeaders($http_response_header);
-		if($res !== false){
+		if ($res !== false) {
 			$pos = strpos($res, '{');
-			if($pos > 0){
+			if ($pos > 0) {
 				// cela signifie qu'il y a une erreur ou que la sortie n'est pas propre
 				$res = substr($res, $pos);
 			}
@@ -170,168 +187,102 @@ class TechATM
 	}
 
 	/**
-	 * @param $url
-	 * @return false|string
+	 * Get content from URL
+	 *
+	 * @param   string          $url    URL to reach
+	 * @return  false|string            Content or false
 	 */
-	public function getContents($url){
+	public function getContents($url)
+	{
 		$this->data = false;
 		$res = @file_get_contents($url);
 		$this->http_response_header = $http_response_header;
 		$this->TResponseHeader = self::parseHeaders($http_response_header);
-		if($res !== false){
+		if ($res !== false) {
 			$this->data = $res;
 		}
 		return $this->data;
 	}
-
-	public static function http_response_code_msg($code = NULL)
+	/**
+	 * Get HTTP response code message
+	 *
+	 * @param  int $code HTTP Code
+	 * @return string    Message
+	 */
+	public static function httpResponseCodeMsg($code = null)
 	{
-		if ($code !== NULL) {
-
+		if ($code !== null) {
 			switch ($code) {
-				case 100:
-					$text = 'Continue';
-					break;
-				case 101:
-					$text = 'Switching Protocols';
-					break;
-				case 200:
-					$text = 'OK';
-					break;
-				case 201:
-					$text = 'Created';
-					break;
-				case 202:
-					$text = 'Accepted';
-					break;
-				case 203:
-					$text = 'Non-Authoritative Information';
-					break;
-				case 204:
-					$text = 'No Content';
-					break;
-				case 205:
-					$text = 'Reset Content';
-					break;
-				case 206:
-					$text = 'Partial Content';
-					break;
-				case 300:
-					$text = 'Multiple Choices';
-					break;
-				case 301:
-					$text = 'Moved Permanently';
-					break;
-				case 302:
-					$text = 'Moved Temporarily';
-					break;
-				case 303:
-					$text = 'See Other';
-					break;
-				case 304:
-					$text = 'Not Modified';
-					break;
-				case 305:
-					$text = 'Use Proxy';
-					break;
-				case 400:
-					$text = 'Bad Request';
-					break;
-				case 401:
-					$text = 'Unauthorized';
-					break;
-				case 402:
-					$text = 'Payment Required';
-					break;
-				case 403:
-					$text = 'Forbidden';
-					break;
-				case 404:
-					$text = 'Not Found';
-					break;
-				case 405:
-					$text = 'Method Not Allowed';
-					break;
-				case 406:
-					$text = 'Not Acceptable';
-					break;
-				case 407:
-					$text = 'Proxy Authentication Required';
-					break;
-				case 408:
-					$text = 'Request Time-out';
-					break;
-				case 409:
-					$text = 'Conflict';
-					break;
-				case 410:
-					$text = 'Gone';
-					break;
-				case 411:
-					$text = 'Length Required';
-					break;
-				case 412:
-					$text = 'Precondition Failed';
-					break;
-				case 413:
-					$text = 'Request Entity Too Large';
-					break;
-				case 414:
-					$text = 'Request-URI Too Large';
-					break;
-				case 415:
-					$text = 'Unsupported Media Type';
-					break;
-				case 500:
-					$text = 'Internal Server Error';
-					break;
-				case 501:
-					$text = 'Not Implemented';
-					break;
-				case 502:
-					$text = 'Bad Gateway';
-					break;
-				case 503:
-					$text = 'Service Unavailable';
-					break;
-				case 504:
-					$text = 'Gateway Time-out';
-					break;
-				case 505:
-					$text = 'HTTP Version not supported';
-					break;
+				case 100: $text = 'Continue'; break;
+				case 101: $text = 'Switching Protocols'; break;
+				case 200: $text = 'OK'; break;
+				case 201: $text = 'Created'; break;
+				case 202: $text = 'Accepted'; break;
+				case 203: $text = 'Non-Authoritative Information'; break;
+				case 204: $text = 'No Content'; break;
+				case 205: $text = 'Reset Content'; break;
+				case 206: $text = 'Partial Content'; break;
+				case 300: $text = 'Multiple Choices'; break;
+				case 301: $text = 'Moved Permanently'; break;
+				case 302: $text = 'Moved Temporarily'; break;
+				case 303: $text = 'See Other'; break;
+				case 304: $text = 'Not Modified'; break;
+				case 305: $text = 'Use Proxy'; break;
+				case 400: $text = 'Bad Request'; break;
+				case 401: $text = 'Unauthorized'; break;
+				case 402: $text = 'Payment Required'; break;
+				case 403: $text = 'Forbidden'; break;
+				case 404: $text = 'Not Found'; break;
+				case 405: $text = 'Method Not Allowed'; break;
+				case 406: $text = 'Not Acceptable'; break;
+				case 407: $text = 'Proxy Authentication Required'; break;
+				case 408: $text = 'Request Time-out'; break;
+				case 409: $text = 'Conflict'; break;
+				case 410: $text = 'Gone'; break;
+				case 411: $text = 'Length Required'; break;
+				case 412: $text = 'Precondition Failed'; break;
+				case 413: $text = 'Request Entity Too Large'; break;
+				case 414: $text = 'Request-URI Too Large'; break;
+				case 415: $text = 'Unsupported Media Type'; break;
+				case 500: $text = 'Internal Server Error'; break;
+				case 501: $text = 'Not Implemented'; break;
+				case 502: $text = 'Bad Gateway'; break;
+				case 503: $text = 'Service Unavailable'; break;
+				case 504: $text = 'Gateway Time-out'; break;
+				case 505: $text = 'HTTP Version not supported'; break;
 				default:
 					$text = 'Unknown http status code "' . htmlentities($code) . '"';
 					break;
 			}
 
 			return $text;
-
 		} else {
-			return $text = 'Unknown http status code NULL';
+			return 'Unknown http status code NULL';
 		}
 	}
-
-	public static function parseHeaders( $headers )
+	/**
+	 * Parse Headers
+	 *
+	 * @param  array $headers Headers
+	 * @return array          Parsed headers
+	 */
+	public static function parseHeaders($headers)
 	{
 		$head = array();
-		if(!is_array($headers)){
+		if (!is_array($headers)) {
 			return $head;
 		}
 
-		foreach( $headers as $k=>$v )
-		{
-			$t = explode( ':', $v, 2 );
-			if( isset( $t[1] ) )
-				$head[ trim($t[0]) ] = trim( $t[1] );
-			else
-			{
+		foreach ($headers as $k=>$v) {
+			$t = explode(':', $v, 2);
+			if ( isset($t[1]) )
+				$head[ trim($t[0]) ] = trim($t[1]);
+			else {
 				$head[] = $v;
-				if( preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$v, $out ) )
+				if ( preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out) )
 					$head['reponse_code'] = intval($out[1]);
 			}
 		}
 		return $head;
 	}
-
 }
