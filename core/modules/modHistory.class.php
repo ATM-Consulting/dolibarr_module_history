@@ -38,11 +38,11 @@ class modHistory extends DolibarrModules
 	 *
 	 *   @param      DoliDB		$db      Database handler
 	 */
-	function __construct($db)
+	public function __construct($db)
 	{
-        global $langs,$conf;
+		global $langs,$conf;
 
-        $this->db = $db;
+		$this->db = $db;
 
 		$this->editor_name = 'ATM Consulting';
 		$this->editor_url = 'https://www.atm-consulting.fr';
@@ -57,7 +57,7 @@ class modHistory extends DolibarrModules
 		// It is used to group modules in module setup page
 		$this->family = "ATM Consulting - CRM";
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
-		$this->name = preg_replace('/^mod/i','',get_class($this));
+		$this->name = preg_replace('/^mod/i', '', get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
 		$this->description = "Description of module History";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
@@ -87,7 +87,7 @@ class modHistory extends DolibarrModules
 		//							'barcode' => 0,                                  	// Set this to 1 if module has its own barcode directory (core/modules/barcode)
 		//							'models' => 0,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
 		//							'css' => array('/history/css/history.css.php'),	// Set this to relative path of css file if module has its own css file
-	 	//							'js' => array('/history/js/history.js'),          // Set this to relative path of js file if module must load a js on all pages
+		//							'js' => array('/history/js/history.js'),          // Set this to relative path of js file if module must load a js on all pages
 		//							'hooks' => array('hookcontext1','hookcontext2')  	// Set here all hooks context managed by module
 		//							'dir' => array('output' => 'othermodulename'),      // To force the default directories names
 		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'isModEnabled("module1") && isModEnabled("module2")', 'picto'=>'yourpicto@history')) // Set here all workflow context managed by module
@@ -95,7 +95,7 @@ class modHistory extends DolibarrModules
 		$this->module_parts = array(
 		  'triggers' => 1
 		  ,'hooks'=>array('globalcard')
-        );
+		);
 
 		// Data directories to create when module is enabled.
 		// Example: this->dirs = array("/history/temp");
@@ -126,9 +126,9 @@ class modHistory extends DolibarrModules
 		$this->const = array();
 
 		// Array to add new pages in new tabs
-		// Example: $this->tabs = array('objecttype:+tabname1:Title1:mylangfile@history:$user->rights->history->read:/history/mynewtab1.php?id=__ID__',  	// To add a new tab identified by code tabname1
-        //                              'objecttype:+tabname2:Title2:mylangfile@history:$user->rights->othermodule->read:/history/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2
-        //                              'objecttype:-tabname:NU:conditiontoremove');                                                     						// To remove an existing tab identified by code tabname
+		// Example: $this->tabs = array('objecttype:+tabname1:Title1:mylangfile@history:$user->hasRight('history', 'read'):/history/mynewtab1.php?id=__ID__',  	// To add a new tab identified by code tabname1
+		//                              'objecttype:+tabname2:Title2:mylangfile@history:$user->hasRight('othermodule', 'read'):/history/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2
+		//                              'objecttype:-tabname:NU:conditiontoremove');                                                     						// To remove an existing tab identified by code tabname
 		// where objecttype can be
 		// 'categories_x'	  to add a tab in category view (replace 'x' by type of category (0=product, 1=supplier, 2=customer, 3=member)
 		// 'contact'          to add a tab in contact view
@@ -149,60 +149,59 @@ class modHistory extends DolibarrModules
 		// 'stock'            to add a tab in stock view
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
-        $this->tabs = array(
-            'propal:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=propal&id=__ID__'
-            ,'propal:-info:NU:true'
+		$this->tabs = array(
+			'propal:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=propal&id=__ID__'
+			,'propal:-info:NU:true'
 
-            ,'thirdparty:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=societe&id=__ID__'
-            ,'thirdparty:-info:NU:true'
+			,'thirdparty:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=societe&id=__ID__'
+			,'thirdparty:-info:NU:true'
 
-            ,'contact:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=contact&id=__ID__'
-            ,'contact:-info:NU:true'
+			,'contact:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=contact&id=__ID__'
+			,'contact:-info:NU:true'
 
-            ,'action:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=action&id=__ID__'
-            ,'action:-info:NU:true'
+			,'action:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=action&id=__ID__'
+			,'action:-info:NU:true'
 
-            ,'product:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=product&id=__ID__'
-            ,'product:-info:NU:true'
+			,'product:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=product&id=__ID__'
+			,'product:-info:NU:true'
 
-            ,'project:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=project&id=__ID__'
-            ,'project:-info:NU:true'
+			,'project:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=project&id=__ID__'
+			,'project:-info:NU:true'
 
-            ,'task:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=task&id=__ID__'
-            ,'task:-info:NU:true'
+			,'task:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=task&id=__ID__'
+			,'task:-info:NU:true'
 
-            //TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
- 			,'order:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=commande&id=__ID__'
-            ,'order:-info:NU:true'
+			//TODO : for dolibarr 5.0 order class will manage correctly change so can be uncomment
+			,'order:+history:History:history@history:$user->hasRight("history","read"):/history/history.php?type_object=commande&id=__ID__'
+			,'order:-info:NU:true'
 
-        );
+		);
 
-        // Dictionaries
-		if (! isModEnabled('history'))
-        {
-        	$conf->history=new stdClass();
-        	$conf->history->enabled=0;
-        }
+		// Dictionaries
+		if (! isModEnabled('history')) {
+			$conf->history=new stdClass();
+			$conf->history->enabled=0;
+		}
 		$this->dictionaries=array();
-        /* Example:
-        if (! isModEnabled("history")) $conf->history->enabled=0;	// This is to avoid warnings
-        $this->dictionaries=array(
-            'langs'=>'mylangfile@history',
-            'tabname'=>array(MAIN_DB_PREFIX."table1",MAIN_DB_PREFIX."table2",MAIN_DB_PREFIX."table3"),		// List of tables we want to see into dictonnary editor
-            'tablib'=>array("Table1","Table2","Table3"),													// Label of tables
-            'tabsql'=>array('SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table1 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table2 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table3 as f'),	// Request to select fields
-            'tabsqlsort'=>array("label ASC","label ASC","label ASC"),																					// Sort order
-            'tabfield'=>array("code,label","code,label","code,label"),																					// List of fields (result of select to show dictionary)
-            'tabfieldvalue'=>array("code,label","code,label","code,label"),																				// List of fields (list of fields to edit a record)
-            'tabfieldinsert'=>array("code,label","code,label","code,label"),																			// List of fields (list of fields for insert)
-            'tabrowid'=>array("rowid","rowid","rowid"),																									// Name of columns with primary key (try to always name it 'rowid')
-            'tabcond'=>array(isModEnabled("history"),isModEnabled("history"),isModEnabled("history"))												// Condition to show each dictionary
-        );
-        */
+		/* Example:
+		if (! isModEnabled("history")) $conf->history->enabled=0;	// This is to avoid warnings
+		$this->dictionaries=array(
+			'langs'=>'mylangfile@history',
+			'tabname'=>array(MAIN_DB_PREFIX."table1",MAIN_DB_PREFIX."table2",MAIN_DB_PREFIX."table3"),		// List of tables we want to see into dictonnary editor
+			'tablib'=>array("Table1","Table2","Table3"),													// Label of tables
+			'tabsql'=>array('SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table1 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table2 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table3 as f'),	// Request to select fields
+			'tabsqlsort'=>array("label ASC","label ASC","label ASC"),																					// Sort order
+			'tabfield'=>array("code,label","code,label","code,label"),																					// List of fields (result of select to show dictionary)
+			'tabfieldvalue'=>array("code,label","code,label","code,label"),																				// List of fields (list of fields to edit a record)
+			'tabfieldinsert'=>array("code,label","code,label","code,label"),																			// List of fields (list of fields for insert)
+			'tabrowid'=>array("rowid","rowid","rowid"),																									// Name of columns with primary key (try to always name it 'rowid')
+			'tabcond'=>array(isModEnabled("history"),isModEnabled("history"),isModEnabled("history"))												// Condition to show each dictionary
+		);
+		*/
 
-        // Boxes
+		// Boxes
 		// Add here list of php file(s) stored in core/boxes that contains class to show a box.
-        $this->boxes = array();			// List of boxes
+		$this->boxes = array();			// List of boxes
 		// Example:
 		//$this->boxes=array(array(0=>array('file'=>'myboxa.php','note'=>'','enabledbydefaulton'=>'Home'),1=>array('file'=>'myboxb.php','note'=>''),2=>array('file'=>'myboxc.php','note'=>'')););
 
@@ -270,7 +269,7 @@ class modHistory extends DolibarrModules
 		// Example:
 		// $this->export_code[$r]=$this->rights_class.'_'.$r;
 		// $this->export_label[$r]='CustomersInvoicesAndInvoiceLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
-        // $this->export_enabled[$r]='1';                               // Condition to show export in list (ie: '$user->id==3'). Set to 1 to always show when module is enabled.
+		// $this->export_enabled[$r]='1';                               // Condition to show export in list (ie: '$user->id==3'). Set to 1 to always show when module is enabled.
 		// $this->export_permission[$r]=array(array("facture","facture","export"));
 		// $this->export_fields_array[$r]=array('s.rowid'=>"IdCompany",'s.nom'=>'CompanyName','s.address'=>'Address','s.zip'=>'Zip','s.town'=>'Town','s.fk_pays'=>'Country','s.phone'=>'Phone','s.siren'=>'ProfId1','s.siret'=>'ProfId2','s.ape'=>'ProfId3','s.idprof4'=>'ProfId4','s.code_compta'=>'CustomerAccountancyCode','s.code_compta_fournisseur'=>'SupplierAccountancyCode','f.rowid'=>"InvoiceId",'f.facnumber'=>"InvoiceRef",'f.datec'=>"InvoiceDateCreation",'f.datef'=>"DateInvoice",'f.total'=>"TotalHT",'f.total_ttc'=>"TotalTTC",'f.tva'=>"TotalVAT",'f.paye'=>"InvoicePaid",'f.fk_statut'=>'InvoiceStatus','f.note'=>"InvoiceNote",'fd.rowid'=>'LineId','fd.description'=>"LineDescription",'fd.price'=>"LineUnitPrice",'fd.tva_tx'=>"LineVATRate",'fd.qty'=>"LineQty",'fd.total_ht'=>"LineTotalHT",'fd.total_tva'=>"LineTotalTVA",'fd.total_ttc'=>"LineTotalTTC",'fd.date_start'=>"DateStart",'fd.date_end'=>"DateEnd",'fd.fk_product'=>'ProductId','p.ref'=>'ProductRef');
 		// $this->export_entities_array[$r]=array('s.rowid'=>"company",'s.nom'=>'company','s.address'=>'company','s.zip'=>'company','s.town'=>'company','s.fk_pays'=>'company','s.phone'=>'company','s.siren'=>'company','s.siret'=>'company','s.ape'=>'company','s.idprof4'=>'company','s.code_compta'=>'company','s.code_compta_fournisseur'=>'company','f.rowid'=>"invoice",'f.facnumber'=>"invoice",'f.datec'=>"invoice",'f.datef'=>"invoice",'f.total'=>"invoice",'f.total_ttc'=>"invoice",'f.tva'=>"invoice",'f.paye'=>"invoice",'f.fk_statut'=>'invoice','f.note'=>"invoice",'fd.rowid'=>'invoice_line','fd.description'=>"invoice_line",'fd.price'=>"invoice_line",'fd.total_ht'=>"invoice_line",'fd.total_tva'=>"invoice_line",'fd.total_ttc'=>"invoice_line",'fd.tva_tx'=>"invoice_line",'fd.qty'=>"invoice_line",'fd.date_start'=>"invoice_line",'fd.date_end'=>"invoice_line",'fd.fk_product'=>'product','p.ref'=>'product');
@@ -287,20 +286,20 @@ class modHistory extends DolibarrModules
 	 *		The init function add constants, boxes, permissions and menus (defined in constructor) into Dolibarr database.
 	 *		It also creates data directories
 	 *
-     *      @param      string	$options    Options when enabling module ('', 'noboxes')
+	 *      @param      string	$options    Options when enabling module ('', 'noboxes')
 	 *      @return     int             	1 if OK, 0 if KO
 	 */
-	function init($options='')
+	public function init($options = '')
 	{
 		$sql = array();
 
-        define('INC_FROM_DOLIBARR',true);
-        dol_include_once('/history/config.php');
+		define('INC_FROM_DOLIBARR', true);
+		dol_include_once('/history/config.php');
 
-        global $db;
+		global $db;
 
-        $o=new DeepHistory($db);
-        $o->init_db_by_vars();
+		$o=new DeepHistory($db);
+		$o->init_db_by_vars();
 
 		$result=$this->_load_tables('/history/sql/');
 
@@ -312,14 +311,13 @@ class modHistory extends DolibarrModules
 	 *      Remove from database constants, boxes and permissions from Dolibarr database.
 	 *		Data directories are not deleted
 	 *
-     *      @param      string	$options    Options when enabling module ('', 'noboxes')
+	 *      @param      string	$options    Options when enabling module ('', 'noboxes')
 	 *      @return     int             	1 if OK, 0 if KO
 	 */
-	function remove($options='')
+	public function remove($options = '')
 	{
 		$sql = array();
 
 		return $this->_remove($sql, $options);
 	}
-
 }
