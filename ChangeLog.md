@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Release 2.4
+- FIX : Compat v23 - *11/12/2025* - 2.4.1
 - NEW : add possibility to historize object of extern module / seed object - *03/12/2025* - 2.4.0
 
 ## Release 2.3
