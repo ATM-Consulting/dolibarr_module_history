@@ -207,7 +207,7 @@ class DeepHistory extends SeedObject
 			if ($show_restore && $user->hasRight('history', 'restore')) {
 				$resql = $this->db->query("SELECT * FROM ".MAIN_DB_PREFIX.$this->table_object.'_deletedhistory');
 				if ($resql) {
-					if ($obj=$this->db->fetch_object($res)) {
+					if ($obj=$this->db->fetch_object($resql)) {
 						$r.=' <a href="?type_object='.$this->type_object.'&id='.$this->fk_object.'&restoreObject='.$this->id.'">'.img_picto('Restore', 'refresh').'</a>';
 					}
 				} else {} // la table n'existe pas, ça veut dire qu'il n'y pas encore eu de suppression d'objet
