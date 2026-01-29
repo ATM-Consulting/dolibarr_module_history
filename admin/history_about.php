@@ -23,9 +23,9 @@
  * 				Put some comments here
  */
 // Dolibarr environment
-$res = @include("../../main.inc.php"); // From htdocs directory
+$res = @include "../../main.inc.php"; // From htdocs directory
 if (! $res) {
-    $res = @include("../../../main.inc.php"); // From "custom" directory
+	$res = @include "../../../main.inc.php"; // From "custom" directory
 }
 
 // Libraries
@@ -37,7 +37,7 @@ $langs->load("history@history");
 
 // Access control
 if (! $user->admin) {
-    accessforbidden();
+	accessforbidden();
 }
 
 /*
@@ -48,17 +48,17 @@ llxHeader('', $langs->trans($page_name));
 
 // Subheader
 $linkback = '<a href="' . DOL_URL_ROOT . '/admin/modules.php">'
-    . $langs->trans("BackToModuleList") . '</a>';
+	. $langs->trans("BackToModuleList") . '</a>';
 print_fiche_titre($langs->trans($page_name), $linkback, 'tools');
 
 // Configuration header
 $head = historyAdminPrepareHead();
 dol_fiche_head(
-    $head,
-    'about',
-    $langs->trans("ModuleName"),
-    -1,
-    'history@history'
+	$head,
+	'about',
+	$langs->trans("ModuleName"),
+	-1,
+	'history@history'
 );
 
 require_once __DIR__ . '/../class/techatm.class.php';
