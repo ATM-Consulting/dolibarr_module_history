@@ -108,7 +108,7 @@ if ($type_object == 'deletedElement') {
 
 			if (function_exists($type_object.'_prepare_head')) {
 				$head = call_user_func($type_object.'_prepare_head', $object, $user);
-				print dol_get_fiche_head($head, 'history', $langs->trans($class), 0, $type_object);
+				print dol_get_fiche_head($head, 'history', $langs->trans($class), -1, $type_object);
 			}
 		} else {
 			exit('Erreur, ce type d\'objet '.ucfirst($type_object).' n\'est pas traité par le module');
