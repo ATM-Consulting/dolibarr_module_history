@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 ## Release 2.4
+- FIX : Fix history table header display (wrong parameter passed to `dol_get_fiche_head`) - *20/02/2026* - 2.4.2
+- FIX : Include all object fields (extrafields included) in history, not only the object's own fields - *20/02/2026* - 2.4.2
+- FIX : Remove false positives related to the select field (`currentObject = -1` & `oldCopy = null`): -1 is now treated as null - *20/02/2026* - 2.4.2
 - FIX : Compat v23 - *11/12/2025* - 2.4.1
 - NEW : add possibility to historize object of extern module / seed object - *03/12/2025* - 2.4.0
 
