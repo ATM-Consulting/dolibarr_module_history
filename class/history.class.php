@@ -165,22 +165,31 @@ class DeepHistory extends SeedObject
 					&& $oldO->{$k} != $v
 					&& (!empty($v) || (!empty($oldO->{$k}) &&  $oldO->{$k} !== '0.000' )   )
 				) {
-					if (isset($oldO->fields[$k]) && $oldO->fields[$k]) {
-							$propName = $oldO->fields[$k]['label'];
-
-						if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
-							// Formatage du timestamp au format JJ/MM/AAAA
-							$oldFormattedDate = (int) $oldO->{$k} ? date('d/m/Y', (int) $oldO->{$k}) : "";
-							$newFormattedDate = (int) $v ? date('d/m/Y', (int) $v) : "";
-
-							if ($oldFormattedDate != $newFormattedDate) {
-								$diff .= $langs->trans($propName) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
-							}
-						} else {
-							$diff .= $langs->trans($propName) . ' : ' . $oldO->{$k} . ' => ' . $v . "\n";
-						}
+					// Si l'un vaut -1 et l'autre est null, on considère que c'est identique
+					if (($v == -1 && is_null($oldO->{$k2})) || ($oldO->{$k2} == -1 && is_null($v))) {
+						// On ne fait rien, c'est un faux positif
 					} else {
-						$diff.=$k.' : '.$oldO->{$k}.' => '.$v."\n";
+						$propName = '';
+						if (isset($oldO->fields[$k]) && $oldO->fields[$k]) {
+							$propName = $oldO->fields[$k]['label'];
+						} else {
+							// Dans le cas ou le champ n'est pas dans la propriété fields de l'objet
+							$propName = $k;
+						}
+
+						if ($propName) {
+							if ($oldO->fields[$k]['type'] == 'datetime' || $oldO->fields[$k]['type'] == 'date') {
+								// Formatage du timestamp au format JJ/MM/AAAA
+								$oldFormattedDate = (int)$oldO->{$k} ? date('d/m/Y', (int)$oldO->{$k}) : "";
+								$newFormattedDate = (int)$v ? date('d/m/Y', (int)$v) : "";
+
+								if ($oldFormattedDate != $newFormattedDate) {
+									$diff .= $langs->trans($propName) . ' : ' . $oldFormattedDate . ' => ' . $newFormattedDate . "\n";
+								}
+							} else {
+								$diff .= $langs->trans($propName) . ' : ' . $oldO->{$k} . ' => ' . $v . "\n";
+							}
+						}
 					}
 				}
 			}
